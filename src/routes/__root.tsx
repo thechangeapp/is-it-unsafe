@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Is It Unsafe? - by TheChange & Midnight Intelligence" },
+      { name: "description", content: "\"Is it Unsafe?\" is a mobile-first web app for rating neighborhood safety for women." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Is It Unsafe? - by TheChange & Midnight Intelligence" },
+      { property: "og:description", content: "\"Is it Unsafe?\" is a mobile-first web app for rating neighborhood safety for women." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Is It Unsafe? - by TheChange & Midnight Intelligence" },
+      { name: "twitter:description", content: "\"Is it Unsafe?\" is a mobile-first web app for rating neighborhood safety for women." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4209c15c-41ac-4f74-bf35-3092652c4037/id-preview-47f2d5df--4d7a99f2-0a2a-444e-ac02-f38c05b778a5.lovable.app-1780248767299.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4209c15c-41ac-4f74-bf35-3092652c4037/id-preview-47f2d5df--4d7a99f2-0a2a-444e-ac02-f38c05b778a5.lovable.app-1780248767299.png" },
     ],
     links: [
       {
