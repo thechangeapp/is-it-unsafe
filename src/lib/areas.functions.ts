@@ -37,19 +37,19 @@ function parseAreas(content: string): string[] {
 export const getNearbyAreas = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => InputSchema.parse(input))
   .handler(async ({ data }) => {
-    const apiKey = process.env.XAI_API_KEY;
+    const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) {
-      throw new Error("Server is missing XAI_API_KEY.");
+      throw new Error("Server is missing LOVABLE_API_KEY.");
     }
 
-    const res = await fetch("https://api.x.ai/v1/chat/completions", {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "grok-3",
+        model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           {
@@ -57,14 +57,15 @@ export const getNearbyAreas = createServerFn({ method: "POST" })
             content: `My coordinates are Latitude: ${data.lat}, Longitude: ${data.lon}.`,
           },
         ],
-        temperature: 0.2,
       }),
     });
 
     if (!res.ok) {
       const text = await res.text().catch(() => "");
-      console.error("xAI API error", res.status, text);
-      throw new Error(`xAI request failed (${res.status}).`);
+      console.error("Lovable AI error", res.status, text);
+      if (res.status === 429) throw new Error("Rate limited, please try again in a moment.");
+      if (res.status === 402) throw new Error("AI credits exhausted. Add funds in Settings → Workspace → Usage.");
+      throw new Error(`AI request failed (${res.status}).`);
     }
 
     const json = (await res.json()) as {
