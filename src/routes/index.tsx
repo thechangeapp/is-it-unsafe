@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { MapPin, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { MapPin, Loader2, Check } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion } from "framer-motion";
 import { getNearbyAreas } from "@/lib/areas.functions";
+import { saveRatings } from "@/lib/ratings.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,7 +27,15 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  type Status = "idle" | "locating" | "fetching" | "success" | "error";
+  type Status =
+    | "idle"
+    | "locating"
+    | "fetching"
+    | "success"
+    | "saving"
+    | "saveError"
+    | "done"
+    | "error";
   type Rating = { area: string; rating: number };
   const [status, setStatus] = useState<Status>("idle");
   const [areas, setAreas] = useState<string[]>([]);
@@ -34,8 +43,29 @@ function Index() {
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [index, setIndex] = useState(0);
   const fetchAreas = useServerFn(getNearbyAreas);
+  const persistRatings = useServerFn(saveRatings);
 
   const loading = status === "locating" || status === "fetching";
+
+  const submitRatings = async (toSave: Rating[]) => {
+    setStatus("saving");
+    try {
+      await persistRatings({
+        data: {
+          ratings: toSave.map((r) => ({ area_name: r.area, rating: r.rating })),
+        },
+      });
+      setStatus("done");
+    } catch (err) {
+      console.error(err);
+      setErrorMsg(
+        err instanceof Error && err.message
+          ? err.message
+          : "Couldn't save your ratings. Please try again.",
+      );
+      setStatus("saveError");
+    }
+  };
 
   const handleGrant = () => {
     if (loading) return;
@@ -89,8 +119,12 @@ function Index() {
 
     const handleRate = (rating: number) => {
       if (!current) return;
-      setRatings((prev) => [...prev, { area: current, rating }]);
+      const next = [...ratings, { area: current, rating }];
+      setRatings(next);
       setIndex((i) => i + 1);
+      if (next.length >= areas.length) {
+        void submitRatings(next);
+      }
     };
 
     return (
@@ -107,16 +141,7 @@ function Index() {
         </header>
 
         <div className="relative flex w-full max-w-sm flex-1 items-center justify-center py-8">
-          {done ? (
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="text-center text-lg font-medium text-white"
-            >
-              All rated! Preparing database...
-            </motion.p>
-          ) : (
+          {done ? null : (
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.article
                 key={`${current}-${index}`}
@@ -158,6 +183,70 @@ function Index() {
 
         {/* Spacer to keep layout balanced */}
         <div aria-hidden className="h-2" />
+      </main>
+    );
+  }
+
+  if (status === "saving") {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-5 bg-black px-6 text-center">
+        <Loader2 className="h-6 w-6 animate-spin text-zinc-400" strokeWidth={1.5} />
+        <p className="text-[13px] tracking-wide text-zinc-500">
+          Saving your anonymous ratings...
+        </p>
+      </main>
+    );
+  }
+
+  if (status === "saveError") {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-black px-6 text-center">
+        <p className="max-w-xs text-[13px] leading-relaxed text-red-400/80">
+          {errorMsg || "Couldn't save your ratings."}
+        </p>
+        <button
+          type="button"
+          onClick={() => void submitRatings(ratings)}
+          className="rounded-full border border-white/15 px-5 py-2 text-[12px] tracking-wide text-zinc-200 transition-colors hover:bg-white/5"
+        >
+          Retry
+        </button>
+      </main>
+    );
+  }
+
+  if (status === "done") {
+    return (
+      <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-6">
+        {/* Ambient rose-gold glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[120px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(190,110,98,0.35) 0%, rgba(120,40,60,0.18) 45%, rgba(0,0,0,0) 75%)",
+          }}
+        />
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative z-10 flex flex-col items-center text-center"
+        >
+          <Check
+            className="h-10 w-10 text-[#e8c4b8]"
+            strokeWidth={1.25}
+          />
+          <h1 className="mt-8 font-display text-5xl font-medium leading-none tracking-tight text-white sm:text-6xl">
+            Thank You.
+          </h1>
+          <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-zinc-300">
+            Your voice helps build a safer world.
+          </p>
+          <p className="mt-16 text-[11px] tracking-wide text-zinc-500">
+            You can now securely close this window.
+          </p>
+        </motion.section>
       </main>
     );
   }
