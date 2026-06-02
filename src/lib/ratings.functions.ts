@@ -7,7 +7,9 @@ const InputSchema = z.object({
     .array(
       z.object({
         area_name: z.string().min(1).max(200),
-        rating: z.number().int().min(1).max(5),
+        lighting_rating: z.number().int().min(1).max(5),
+        density_rating: z.number().int().min(1).max(5),
+        gut_rating: z.number().int().min(1).max(5),
       }),
     )
     .min(1)
