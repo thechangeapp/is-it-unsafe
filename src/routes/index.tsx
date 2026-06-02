@@ -132,13 +132,17 @@ function Index() {
         <GeminiBackground />
 
         <header className="relative z-10 w-full max-w-md text-center">
-          <h2 className="text-balance text-[15px] leading-relaxed text-zinc-300 sm:text-base">
-            Please rate the upcoming locations on a scale of 1 to 5 based on how
-            safe that place is for women, where 1 being &lsquo;very safe&rsquo;
-            and 5 being &lsquo;super unsafe&rsquo;.
-          </h2>
-          <p className="mt-3 text-[11px] leading-relaxed text-zinc-600">
-            This rating is anonymous. We do not store your location or user data.
+          <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
+            Midnight Intelligence &amp; TheChange
+          </p>
+          <h1 className="mt-2 font-display text-3xl font-medium tracking-tight text-white">
+            Rate Safety
+          </h1>
+          <p className="mt-3 text-[13px] leading-relaxed text-zinc-400">
+            Rate from 1 (Safe) to 5 (Unsafe) to help map local safety for women.
+          </p>
+          <p className="mt-1 text-[11px] text-zinc-600">
+            100% anonymous · No location data is stored
           </p>
         </header>
 
@@ -433,27 +437,27 @@ function RatingCard({
 
   return (
     <article
-      className="w-full rounded-3xl border border-white/10 bg-zinc-900/80 px-5 py-7 backdrop-blur-md sm:px-7 sm:py-9"
+      className="w-full rounded-3xl border border-white/10 bg-[#0e0e11]/80 px-5 py-7 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] backdrop-blur-lg sm:px-7 sm:py-9"
     >
-      <h3 className="text-balance text-center font-display text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl">
+      <h3 className="text-balance text-center font-display text-3xl font-medium tracking-tight text-white/95 sm:text-4xl">
         {area}
       </h3>
 
-      <div className="mt-5 h-px w-full bg-white/10" />
+      <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
-      <div className="mt-5 flex flex-col gap-5">
+      <div className="mt-6 flex flex-col gap-6">
         {PARAMS.map((p) => {
           const selected = selections[p.key];
           return (
             <div key={p.key} className="w-full">
-              <p className="text-center text-[12px] font-medium uppercase tracking-[0.14em] text-zinc-300 sm:text-[13px]">
+              <p className="text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
                 {p.title}
               </p>
-              <div className="mt-2 flex w-full items-end justify-between gap-1.5 px-0.5 text-[9px] uppercase tracking-[0.16em] text-zinc-500">
+              <div className="mt-2 flex w-full justify-between px-1 text-[9px] font-medium uppercase tracking-[0.18em] text-zinc-500/80">
                 <span>{p.leftLabel}</span>
                 <span>{p.rightLabel}</span>
               </div>
-              <div className="mt-1.5 flex w-full items-center justify-between gap-1.5">
+              <div className="mt-2 flex w-full items-center justify-between px-1">
                 {[1, 2, 3, 4, 5].map((n) => {
                   const isSelected = selected === n;
                   return (
@@ -463,10 +467,10 @@ function RatingCard({
                       onClick={() => handleSelect(p.key, n)}
                       aria-label={`${p.title}: ${n}`}
                       aria-pressed={isSelected}
-                      className={`flex h-11 flex-1 items-center justify-center rounded-xl border text-sm font-medium transition-colors sm:h-12 ${
+                      className={`flex h-11 w-11 items-center justify-center rounded-full border text-sm font-semibold transition-all duration-300 sm:h-12 sm:w-12 ${
                         isSelected
-                          ? "border-white bg-white text-black"
-                          : "border-white/5 bg-zinc-800 text-white hover:bg-zinc-700 active:bg-zinc-600"
+                          ? "border-white bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.45)] scale-105"
+                          : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10 hover:border-white/20 active:scale-95"
                       }`}
                     >
                       {n}
@@ -486,12 +490,12 @@ function RatingCard({
           setSubmitted(true);
           onSkip();
         }}
-        className="mx-auto mt-6 block text-[12px] text-zinc-500 transition-colors hover:text-zinc-300"
+        className="mx-auto mt-7 block text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-zinc-300"
       >
         Skip this place
       </button>
 
-      <p className="mt-3 text-center text-[10px] uppercase tracking-[0.22em] text-zinc-600">
+      <p className="mt-4 text-center text-[10px] font-medium uppercase tracking-[0.25em] text-zinc-600">
         {position} / {total}
       </p>
     </article>
@@ -501,46 +505,48 @@ function RatingCard({
 function GeminiBackground() {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 2.5, ease: "easeInOut" }}
+      initial={{ y: 250, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
       aria-hidden
-      className="pointer-events-none absolute top-0 inset-x-0 h-[420px] overflow-hidden z-0 bg-black"
+      className="pointer-events-none absolute bottom-0 inset-x-0 h-[450px] overflow-hidden z-0 bg-black"
     >
       {/* Indigo Base */}
       <div
-        className="absolute top-[-100px] left-[10%] w-[80%] h-[350px] rounded-full blur-[110px] opacity-60"
+        className="absolute bottom-[-100px] left-[10%] w-[80%] h-[350px] rounded-full blur-[110px] opacity-60"
         style={{
-          background: "radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, rgba(0,0,0,0) 80%)",
+          background: "radial-gradient(circle, rgba(37, 99, 235, 0.45) 0%, rgba(0,0,0,0) 80%)",
           mixBlendMode: "screen",
         }}
       />
       {/* Teal / Emerald Spot */}
       <div
-        className="animate-gemini-teal absolute top-[-150px] left-[-80px] w-[350px] h-[350px] rounded-full blur-[100px]"
+        className="animate-gemini-teal absolute bottom-[-150px] left-[-80px] w-[350px] h-[350px] rounded-full blur-[100px]"
         style={{
-          background: "radial-gradient(circle, rgba(20, 184, 166, 0.45) 0%, rgba(0,0,0,0) 75%)",
+          background: "radial-gradient(circle, rgba(13, 148, 136, 0.65) 0%, rgba(0,0,0,0) 75%)",
           mixBlendMode: "screen",
         }}
       />
       {/* Purple / Violet Spot */}
       <div
-        className="animate-gemini-purple absolute top-[-120px] left-[15%] w-[400px] h-[400px] rounded-full blur-[110px]"
+        className="animate-gemini-purple absolute bottom-[-120px] left-[15%] w-[400px] h-[400px] rounded-full blur-[110px]"
         style={{
-          background: "radial-gradient(circle, rgba(139, 92, 246, 0.45) 0%, rgba(0,0,0,0) 75%)",
+          background: "radial-gradient(circle, rgba(139, 92, 246, 0.65) 0%, rgba(0,0,0,0) 75%)",
           mixBlendMode: "screen",
         }}
       />
       {/* Gold / Orange Spot */}
       <div
-        className="animate-gemini-gold absolute top-[-150px] right-[-80px] w-[320px] h-[320px] rounded-full blur-[90px]"
+        className="animate-gemini-gold absolute bottom-[-150px] right-[-80px] w-[320px] h-[320px] rounded-full blur-[90px]"
         style={{
-          background: "radial-gradient(circle, rgba(245, 158, 11, 0.38) 0%, rgba(0,0,0,0) 75%)",
+          background: "radial-gradient(circle, rgba(245, 158, 11, 0.55) 0%, rgba(0,0,0,0) 75%)",
           mixBlendMode: "screen",
         }}
       />
-      {/* Smooth bottom fade-out to ensure solid black at the bottom */}
-      <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black to-transparent" />
+      {/* Smooth top fade-out */}
+      <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-black to-transparent" />
+      {/* Smooth bottom fade-out */}
+      <div className="absolute inset-x-0 bottom-0 h-[100px] bg-gradient-to-t from-black to-transparent" />
     </motion.div>
   );
 }
