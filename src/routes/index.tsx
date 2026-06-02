@@ -36,7 +36,12 @@ function Index() {
     | "saveError"
     | "done"
     | "error";
-  type Rating = { area: string; rating: number };
+  type Rating = {
+    area: string;
+    lighting_rating: number;
+    density_rating: number;
+    gut_rating: number;
+  };
   const [status, setStatus] = useState<Status>("idle");
   const [areas, setAreas] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
@@ -52,7 +57,12 @@ function Index() {
     try {
       await persistRatings({
         data: {
-          ratings: toSave.map((r) => ({ area_name: r.area, rating: r.rating })),
+          ratings: toSave.map((r) => ({
+            area_name: r.area,
+            lighting_rating: r.lighting_rating,
+            density_rating: r.density_rating,
+            gut_rating: r.gut_rating,
+          })),
         },
       });
       setStatus("done");
@@ -117,16 +127,6 @@ function Index() {
     const current = areas[index];
     const done = index >= areas.length;
 
-    const handleRate = (rating: number) => {
-      if (!current) return;
-      const next = [...ratings, { area: current, rating }];
-      setRatings(next);
-      setIndex((i) => i + 1);
-      if (next.length >= areas.length) {
-        void submitRatings(next);
-      }
-    };
-
     return (
       <main className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-black px-5 pt-10 pb-12 sm:pt-14">
         {/* Breathing dark-blue ambient layer */}
@@ -159,44 +159,33 @@ function Index() {
         <div className="relative z-10 flex w-full max-w-sm flex-1 items-center justify-center py-8">
           {done ? null : (
             <AnimatePresence mode="popLayout" initial={false}>
-              <motion.article
+              <RatingCard
                 key={`${current}-${index}`}
-                initial={{ opacity: 0, x: 60, scale: 0.98 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: -300 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="w-full rounded-3xl border border-white/10 bg-zinc-900/80 px-6 py-10 backdrop-blur-md sm:px-8 sm:py-12"
-              >
-                <div className="flex min-h-[120px] items-center justify-center">
-                  <h3 className="text-balance text-center font-display text-3xl font-medium leading-tight tracking-tight text-white sm:text-4xl">
-                    {current}
-                  </h3>
-                </div>
-
-                <div className="mt-8 h-px w-full bg-white/10" />
-
-                <div className="mt-8 flex w-full items-end justify-between gap-2 px-1 text-[10px] uppercase tracking-[0.18em] text-zinc-500">
-                  <span>Very Unsafe</span>
-                  <span>Very Safe</span>
-                </div>
-                <div className="mt-2 flex w-full items-center justify-between gap-2">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <button
-                      key={n}
-                      type="button"
-                      onClick={() => handleRate(n)}
-                      className="flex h-12 w-12 flex-1 items-center justify-center rounded-xl border border-white/5 bg-zinc-800 text-base font-medium text-white transition-colors hover:bg-zinc-700 active:bg-zinc-600 sm:h-14"
-                      aria-label={`Rate ${n}`}
-                    >
-                      {n}
-                    </button>
-                  ))}
-                </div>
-
-                <p className="mt-5 text-center text-[11px] uppercase tracking-[0.22em] text-zinc-500">
-                  {index + 1} / {areas.length}
-                </p>
-              </motion.article>
+                area={current}
+                position={index + 1}
+                total={areas.length}
+                onComplete={(values) => {
+                  const next = [...ratings, { area: current, ...values }];
+                  setRatings(next);
+                  setIndex((i) => i + 1);
+                  if (next.length >= areas.length) {
+                    void submitRatings(next);
+                  }
+                }}
+                onSkip={() => {
+                  setIndex((i) => i + 1);
+                  if (ratings.length + (areas.length - index - 1) === 0) {
+                    // edge: nothing rated and this was the last card
+                  }
+                  if (index + 1 >= areas.length) {
+                    if (ratings.length > 0) {
+                      void submitRatings(ratings);
+                    } else {
+                      setStatus("done");
+                    }
+                  }
+                }}
+              />
             </AnimatePresence>
           )}
         </div>
