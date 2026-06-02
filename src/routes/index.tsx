@@ -156,38 +156,77 @@ function Index() {
           </p>
         </header>
 
-        <div className="relative z-10 flex w-full max-w-sm flex-1 items-center justify-center py-8">
-          {done ? null : (
-            <AnimatePresence mode="popLayout" initial={false}>
-              <RatingCard
-                key={`${current}-${index}`}
-                area={current}
-                position={index + 1}
-                total={areas.length}
-                onComplete={(values) => {
-                  const next = [...ratings, { area: current, ...values }];
-                  setRatings(next);
-                  setIndex((i) => i + 1);
-                  if (next.length >= areas.length) {
-                    void submitRatings(next);
-                  }
-                }}
-                onSkip={() => {
-                  setIndex((i) => i + 1);
-                  if (ratings.length + (areas.length - index - 1) === 0) {
-                    // edge: nothing rated and this was the last card
-                  }
-                  if (index + 1 >= areas.length) {
-                    if (ratings.length > 0) {
-                      void submitRatings(ratings);
-                    } else {
-                      setStatus("done");
+        <div className="relative z-10 flex w-full max-w-sm flex-1 items-center justify-center py-8 min-h-[460px] sm:min-h-[500px]">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {(() => {
+              const visibleIndices: number[] = [];
+              if (index < areas.length) visibleIndices.push(index);
+              if (index + 1 < areas.length) visibleIndices.push(index + 1);
+
+              return visibleIndices.reverse().map((i) => {
+                const isTop = i === index;
+                const cardArea = areas[i];
+                return (
+                  <motion.div
+                    key={`${cardArea}-${i}`}
+                    style={{
+                      position: "absolute",
+                      width: "100%",
+                      zIndex: isTop ? 10 : 0,
+                      pointerEvents: isTop ? "auto" : "none",
+                      willChange: "transform, opacity",
+                    }}
+                    initial={isTop ? { opacity: 0, scale: 0.95, y: 0 } : { opacity: 0, scale: 0.9, y: 32 }}
+                    animate={
+                      isTop
+                        ? { opacity: 1, scale: 1, y: 0, x: 0, rotate: 0 }
+                        : { opacity: 0.5, scale: 0.94, y: 16, x: 0, rotate: 0 }
                     }
-                  }
-                }}
-              />
-            </AnimatePresence>
-          )}
+                    exit={{
+                      opacity: 0,
+                      x: -360,
+                      rotate: -10,
+                      y: 20,
+                      transition: { duration: 0.35, ease: "easeInOut" }
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 280,
+                      damping: 26,
+                      mass: 0.8
+                    }}
+                  >
+                    <RatingCard
+                      area={cardArea}
+                      position={i + 1}
+                      total={areas.length}
+                      onComplete={(values) => {
+                        const next = [...ratings, { area: cardArea, ...values }];
+                        setRatings(next);
+                        setIndex((idx) => idx + 1);
+                        if (next.length >= areas.length) {
+                          void submitRatings(next);
+                        }
+                      }}
+                      onSkip={() => {
+                        setIndex((idx) => idx + 1);
+                        if (ratings.length + (areas.length - i - 1) === 0) {
+                          // edge: nothing rated
+                        }
+                        if (i + 1 >= areas.length) {
+                          if (ratings.length > 0) {
+                            void submitRatings(ratings);
+                          } else {
+                            setStatus("done");
+                          }
+                        }
+                      }}
+                    />
+                  </motion.div>
+                );
+              });
+            })()}
+          </AnimatePresence>
         </div>
 
         {/* Spacer to keep layout balanced */}
@@ -407,11 +446,7 @@ function RatingCard({
   };
 
   return (
-    <motion.article
-      initial={{ opacity: 0, x: 60, scale: 0.98 }}
-      animate={{ opacity: 1, x: 0, scale: 1 }}
-      exit={{ opacity: 0, x: -320 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+    <article
       className="w-full rounded-3xl border border-white/10 bg-zinc-900/80 px-5 py-7 backdrop-blur-md sm:px-7 sm:py-9"
     >
       <h3 className="text-balance text-center font-display text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl">
@@ -473,6 +508,6 @@ function RatingCard({
       <p className="mt-3 text-center text-[10px] uppercase tracking-[0.22em] text-zinc-600">
         {position} / {total}
       </p>
-    </motion.article>
+    </article>
   );
 }
