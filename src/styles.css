@@ -152,3 +152,12 @@
 @layer utilities {
   .font-display { font-family: var(--font-display); }
 }
+
+@keyframes breathe-glow {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+.animate-breathe {
+  animation: breathe-glow 7s ease-in-out infinite;
+}
