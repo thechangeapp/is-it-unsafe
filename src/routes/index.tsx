@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { MapPin, Loader2, Check } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion } from "framer-motion";
@@ -145,171 +145,196 @@ function Index() {
     );
   };
 
-  if (status === "success") {
-    const current = areas[index];
-    const done = index >= areas.length;
+  return (
+    <main
+      className={`relative flex min-h-screen flex-col items-center overflow-hidden bg-black transition-all duration-700 ${
+        status === "success"
+          ? "justify-between px-5 pt-10 pb-12 sm:pt-14"
+          : status === "done" || status === "saving" || status === "saveError"
+          ? "justify-center px-6 text-center"
+          : "justify-start gap-8 px-5 pt-12 pb-10 sm:gap-10 sm:pt-16"
+      }`}
+    >
+      {/* Background Gradients with AnimatePresence */}
+      <AnimatePresence>
+        {status === "success" && (
+          <motion.div
+            key="gemini-bg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0 z-0"
+          >
+            <GeminiBackground />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-    return (
-      <main className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-black px-5 pt-10 pb-12 sm:pt-14">
-        <GeminiBackground />
+      <AnimatePresence>
+        {(status === "locating" || status === "fetching" || status === "done") && (
+          <motion.div
+            key="cherry-bg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-transparent"
+          >
+            {/* Cherry Red Spot */}
+            <div
+              className="animate-cherry-1 absolute left-[15%] top-[20%] h-[380px] w-[380px] rounded-full blur-[110px]"
+              style={{
+                background: "radial-gradient(circle, rgba(220, 38, 38, 0.45) 0%, rgba(0,0,0,0) 75%)",
+                mixBlendMode: "screen",
+              }}
+            />
+            {/* Bright Pink Spot */}
+            <div
+              className="animate-cherry-2 absolute right-[10%] bottom-[20%] h-[420px] w-[420px] rounded-full blur-[120px]"
+              style={{
+                background: "radial-gradient(circle, rgba(236, 72, 153, 0.45) 0%, rgba(0,0,0,0) 75%)",
+                mixBlendMode: "screen",
+              }}
+            />
+            {/* Rose Red Spot */}
+            <div
+              className="animate-cherry-3 absolute left-[30%] bottom-[10%] h-[360px] w-[360px] rounded-full blur-[110px]"
+              style={{
+                background: "radial-gradient(circle, rgba(244, 63, 94, 0.4) 0%, rgba(0,0,0,0) 75%)",
+                mixBlendMode: "screen",
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        <header className="relative z-10 w-full max-w-md text-center">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
-            Midnight Intelligence &amp; TheChange
-          </p>
-          <h1 className="mt-2 font-display text-3xl font-medium tracking-tight text-white">
-            Rate Safety
-          </h1>
-          <p className="mt-3 text-[13px] leading-relaxed text-zinc-400">
-            Rate from 1 (Safe) to 5 (Unsafe) to help map local safety for women.
-          </p>
-          <p className="mt-1 text-[11px] text-zinc-600">
-            100% anonymous · No location data is stored
-          </p>
-        </header>
+      {/* CONTENT REDIRECTS BASED ON STATUS */}
+      {status === "success" && (
+        <>
+          <header className="relative z-10 w-full max-w-md text-center">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
+              Midnight Intelligence &amp; TheChange
+            </p>
+            <h1 className="mt-2 font-display text-3xl font-medium tracking-tight text-white">
+              Rate Safety
+            </h1>
+            <p className="mt-3 text-[13px] leading-relaxed text-zinc-400">
+              Rate from 1 (Safe) to 5 (Unsafe) to help map local safety for women.
+            </p>
+            <p className="mt-1 text-[11px] text-zinc-600">
+              100% anonymous · No location data is stored
+            </p>
+          </header>
 
-        <div className="relative z-10 flex w-full max-w-sm flex-1 items-center justify-center py-8 min-h-[460px] sm:min-h-[500px]">
-          <AnimatePresence mode="popLayout" initial={false}>
-            {(() => {
-              const visibleIndices: number[] = [];
-              if (index < areas.length) visibleIndices.push(index);
-              if (index + 1 < areas.length) visibleIndices.push(index + 1);
+          <div className="relative z-10 flex w-full max-w-sm flex-1 items-center justify-center py-8 min-h-[460px] sm:min-h-[500px]">
+            <AnimatePresence mode="popLayout" initial={false}>
+              {(() => {
+                const visibleIndices: number[] = [];
+                if (index < areas.length) visibleIndices.push(index);
+                if (index + 1 < areas.length) visibleIndices.push(index + 1);
 
-              return visibleIndices.reverse().map((i) => {
-                const isTop = i === index;
-                const cardArea = areas[i];
-                return (
-                  <motion.div
-                    key={`${cardArea}-${i}`}
-                    style={{
-                      position: "absolute",
-                      width: "100%",
-                      zIndex: isTop ? 10 : 0,
-                      pointerEvents: isTop ? "auto" : "none",
-                      willChange: "transform, opacity",
-                    }}
-                    initial={isTop ? { opacity: 0, scale: 0.95, y: 0 } : { opacity: 0, scale: 0.9, y: 32 }}
-                    animate={
-                      isTop
-                        ? { opacity: 1, scale: 1, y: 0, x: 0, rotate: 0 }
-                        : { opacity: 0, scale: 0.94, y: 16, x: 0, rotate: 0 }
-                    }
-                    exit={{
-                      opacity: 0,
-                      x: -360,
-                      rotate: -10,
-                      y: 20,
-                      transition: { duration: 0.35, ease: "easeInOut" }
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 280,
-                      damping: 26,
-                      mass: 0.8
-                    }}
-                  >
-                    <RatingCard
-                      area={cardArea}
-                      position={i + 1}
-                      total={areas.length}
-                      onComplete={(values) => {
-                        const next = [...ratings, { area: cardArea, ...values }];
-                        setRatings(next);
-                        setIndex((idx) => idx + 1);
-                        if (next.length >= areas.length) {
-                          void submitRatings(next);
-                        }
+                return visibleIndices.reverse().map((i) => {
+                  const isTop = i === index;
+                  const cardArea = areas[i];
+                  return (
+                    <motion.div
+                      key={`${cardArea}-${i}`}
+                      style={{
+                        position: "absolute",
+                        width: "100%",
+                        zIndex: isTop ? 10 : 0,
+                        pointerEvents: isTop ? "auto" : "none",
+                        willChange: "transform, opacity",
                       }}
-                      onSkip={() => {
-                        setIndex((idx) => idx + 1);
-                        if (ratings.length + (areas.length - i - 1) === 0) {
-                          // edge: nothing rated
-                        }
-                        if (i + 1 >= areas.length) {
-                          if (ratings.length > 0) {
-                            void submitRatings(ratings);
-                          } else {
-                            setStatus("done");
+                      initial={isTop ? { opacity: 0, scale: 0.95, y: 0 } : { opacity: 0, scale: 0.9, y: 32 }}
+                      animate={
+                        isTop
+                          ? { opacity: 1, scale: 1, y: 0, x: 0, rotate: 0 }
+                          : { opacity: 0, scale: 0.94, y: 16, x: 0, rotate: 0 }
+                      }
+                      exit={{
+                        opacity: 0,
+                        x: -360,
+                        rotate: -10,
+                        y: 20,
+                        transition: { duration: 0.35, ease: "easeInOut" }
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 280,
+                        damping: 26,
+                        mass: 0.8
+                      }}
+                    >
+                      <RatingCard
+                        area={cardArea}
+                        position={i + 1}
+                        total={areas.length}
+                        onComplete={(values) => {
+                          const next = [...ratings, { area: cardArea, ...values }];
+                          setRatings(next);
+                          setIndex((idx) => idx + 1);
+                          if (next.length >= areas.length) {
+                            void submitRatings(next);
                           }
-                        }
-                      }}
-                    />
-                  </motion.div>
-                );
-              });
-            })()}
-          </AnimatePresence>
+                        }}
+                        onSkip={() => {
+                          setIndex((idx) => idx + 1);
+                          if (ratings.length + (areas.length - i - 1) === 0) {
+                            // edge: nothing rated
+                          }
+                          if (i + 1 >= areas.length) {
+                            if (ratings.length > 0) {
+                              void submitRatings(ratings);
+                            } else {
+                              setStatus("done");
+                            }
+                          }
+                        }}
+                      />
+                    </motion.div>
+                  );
+                });
+              })()}
+            </AnimatePresence>
+          </div>
+
+          <div aria-hidden className="relative z-10 h-2" />
+        </>
+      )}
+
+      {status === "saving" && (
+        <div className="relative z-10 flex flex-col items-center justify-center gap-5 py-20">
+          <Loader2 className="h-6 w-6 animate-spin text-zinc-400" strokeWidth={1.5} />
+          <p className="text-[13px] tracking-wide text-zinc-500">
+            Saving your anonymous ratings...
+          </p>
         </div>
+      )}
 
-        {/* Spacer to keep layout balanced */}
-        <div aria-hidden className="relative z-10 h-2" />
-      </main>
-    );
-  }
-
-  if (status === "saving") {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-5 bg-black px-6 text-center">
-        <Loader2 className="h-6 w-6 animate-spin text-zinc-400" strokeWidth={1.5} />
-        <p className="text-[13px] tracking-wide text-zinc-500">
-          Saving your anonymous ratings...
-        </p>
-      </main>
-    );
-  }
-
-  if (status === "saveError") {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-black px-6 text-center">
-        <p className="max-w-xs text-[13px] leading-relaxed text-red-400/80">
-          {errorMsg || "Couldn't save your ratings."}
-        </p>
-        <button
-          type="button"
-          onClick={() => void submitRatings(ratings)}
-          className="rounded-full border border-white/15 px-5 py-2 text-[12px] tracking-wide text-zinc-200 transition-colors hover:bg-white/5"
-        >
-          Retry
-        </button>
-      </main>
-    );
-  }
-
-  if (status === "done") {
-    return (
-      <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-6">
-        {/* Animated breathing cherry/pink mesh gradient */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-black">
-          {/* Cherry Red Spot */}
-          <div
-            className="animate-cherry-1 absolute left-[15%] top-[20%] h-[380px] w-[380px] rounded-full blur-[110px]"
-            style={{
-              background: "radial-gradient(circle, rgba(220, 38, 38, 0.45) 0%, rgba(0,0,0,0) 75%)",
-              mixBlendMode: "screen",
-            }}
-          />
-          {/* Bright Pink Spot */}
-          <div
-            className="animate-cherry-2 absolute right-[10%] bottom-[20%] h-[420px] w-[420px] rounded-full blur-[120px]"
-            style={{
-              background: "radial-gradient(circle, rgba(236, 72, 153, 0.45) 0%, rgba(0,0,0,0) 75%)",
-              mixBlendMode: "screen",
-            }}
-          />
-          {/* Rose Red Spot */}
-          <div
-            className="animate-cherry-3 absolute left-[30%] bottom-[10%] h-[360px] w-[360px] rounded-full blur-[110px]"
-            style={{
-              background: "radial-gradient(circle, rgba(244, 63, 94, 0.4) 0%, rgba(0,0,0,0) 75%)",
-              mixBlendMode: "screen",
-            }}
-          />
+      {status === "saveError" && (
+        <div className="relative z-10 flex flex-col items-center justify-center gap-6 py-20">
+          <p className="max-w-xs text-[13px] leading-relaxed text-red-400/80">
+            {errorMsg || "Couldn't save your ratings."}
+          </p>
+          <button
+            type="button"
+            onClick={() => void submitRatings(ratings)}
+            className="rounded-full border border-white/15 px-5 py-2 text-[12px] tracking-wide text-zinc-200 transition-colors hover:bg-white/5"
+          >
+            Retry
+          </button>
         </div>
+      )}
+
+      {status === "done" && (
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative z-10 flex flex-col items-center text-center"
+          className="relative z-10 flex flex-col items-center text-center py-20"
         >
           <Check
             className="h-10 w-10 text-rose-500"
@@ -334,71 +359,72 @@ function Index() {
             Closing this tab in <span className="font-semibold text-rose-400 tabular-nums">{countdown}</span>s · <span className="underline decoration-zinc-600 hover:decoration-rose-400">Exit now</span>
           </button>
         </motion.section>
-      </main>
-    );
-  }
+      )}
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-black px-5 py-10 sm:gap-10">
-      {/* Title group — outside the modal */}
-      <div className="w-full max-w-sm text-center">
-        <h1
-          id="modal-title"
-          className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-white sm:text-5xl"
-        >
-          Is it <em className="italic font-normal">Unsafe</em>?
-        </h1>
-        <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.22em] text-zinc-500">
-          By Midnight Intelligence &amp; TheChange Initiative
-        </p>
-      </div>
+      {/* Landing page (idle, locating, fetching, error) */}
+      {(status === "idle" || status === "locating" || status === "fetching" || status === "error") && (
+        <>
+          {/* Title group — outside the modal */}
+          <div className="relative z-10 w-full max-w-sm text-center">
+            <h1
+              id="modal-title"
+              className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-white sm:text-5xl"
+            >
+              Is it <em className="italic font-normal">Unsafe</em>?
+            </h1>
+            <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.22em] text-zinc-500">
+              By Midnight Intelligence &amp; TheChange Initiative
+            </p>
+          </div>
 
-      <section
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
-        className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#0a0a0a] px-8 py-10 text-center transition-all duration-300 sm:px-10 sm:py-12"
-      >
-        {/* Prompt */}
-        <p className="text-[15px] leading-relaxed text-zinc-300">
-          To help map safety, we need to know your general area to find nearby
-          neighborhoods.
-        </p>
-
-        {/* Button */}
-        <button
-          type="button"
-          onClick={handleGrant}
-          disabled={loading}
-          className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-[14px] font-medium tracking-wide text-black transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:bg-zinc-300"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Locating…</span>
-            </>
-          ) : (
-            <>
-              <MapPin className="h-4 w-4" strokeWidth={2} />
-              <span>Grant Location Access</span>
-            </>
-          )}
-        </button>
-
-        {status === "error" && errorMsg ? (
-          <p
-            role="alert"
-            className="mt-3 text-[12px] leading-relaxed text-red-400/80"
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            className="relative z-10 w-full max-w-sm rounded-3xl border border-white/10 bg-[#0a0a0a]/90 px-8 py-10 text-center transition-all duration-300 sm:px-10 sm:py-12"
           >
-            {errorMsg}
-          </p>
-        ) : null}
-      </section>
+            {/* Prompt */}
+            <p className="text-[15px] leading-relaxed text-zinc-300">
+              To help map safety, we need to know your general area to find nearby
+              neighborhoods.
+            </p>
 
-      {/* Disclaimer — outside and below the modal */}
-      <p className="max-w-sm text-center text-[11px] leading-relaxed text-zinc-600">
-        This rating is anonymous. We do not store your location or user data.
-      </p>
+            {/* Button */}
+            <button
+              type="button"
+              onClick={handleGrant}
+              disabled={loading}
+              className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-[14px] font-medium tracking-wide text-black transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:bg-zinc-300"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Locating…</span>
+                </>
+              ) : (
+                <>
+                  <MapPin className="h-4 w-4" strokeWidth={2} />
+                  <span>Grant Location Access</span>
+                </>
+              )}
+            </button>
+
+            {status === "error" && errorMsg ? (
+              <p
+                role="alert"
+                className="mt-3 text-[12px] leading-relaxed text-red-400/80"
+              >
+                {errorMsg}
+              </p>
+            ) : null}
+          </section>
+
+          {/* Disclaimer — outside and below the modal */}
+          <p className="relative z-10 max-w-sm text-center text-[11px] leading-relaxed text-zinc-600">
+            This rating is anonymous. We do not store your location or user data.
+          </p>
+        </>
+      )}
     </main>
   );
 }
@@ -419,19 +445,19 @@ const PARAMS: Array<{
 }> = [
   {
     key: "lighting_rating",
-    title: "Lighting at Night",
+    title: "Lighting at night",
     leftLabel: "Very lit",
     rightLabel: "Very dark",
   },
   {
     key: "density_rating",
-    title: "Women in Crowd",
+    title: "Women in crowd",
     leftLabel: "Many women",
     rightLabel: "Very few",
   },
   {
     key: "gut_rating",
-    title: "Gut Feeling / Intuition / Experience",
+    title: "Gut feeling / intuition / experience",
     leftLabel: "Very safe",
     rightLabel: "Super unsafe",
   },
@@ -495,39 +521,42 @@ function RatingCard({
       <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
       <div className="mt-6 flex flex-col gap-6">
-        {PARAMS.map((p) => {
+        {PARAMS.map((p, idx) => {
           const selected = selections[p.key];
           return (
-            <div key={p.key} className="w-full">
-              <p className="text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-400">
-                {p.title}
-              </p>
-              <div className="mt-2 flex w-full justify-between px-1 text-[9px] font-medium uppercase tracking-[0.18em] text-zinc-500/80">
-                <span>{p.leftLabel}</span>
-                <span>{p.rightLabel}</span>
+            <Fragment key={p.key}>
+              {idx > 0 && <div className="mx-auto h-[1px] w-[8px] bg-zinc-700/60" />}
+              <div className="w-full">
+                <p className="text-left text-[11px] font-semibold tracking-[0.1em] text-zinc-400">
+                  {p.title}
+                </p>
+                <div className="mt-2 flex w-full justify-between px-1 text-[9px] font-medium uppercase tracking-[0.18em] text-zinc-500/80">
+                  <span>{p.leftLabel}</span>
+                  <span>{p.rightLabel}</span>
+                </div>
+                <div className="mt-2 flex w-full items-center justify-between px-1">
+                  {[1, 2, 3, 4, 5].map((n) => {
+                    const isSelected = selected === n;
+                    return (
+                      <button
+                        key={n}
+                        type="button"
+                        onClick={() => handleSelect(p.key, n)}
+                        aria-label={`${p.title}: ${n}`}
+                        aria-pressed={isSelected}
+                        className={`flex h-11 w-11 items-center justify-center rounded-full border text-sm font-semibold transition-all duration-300 sm:h-12 sm:w-12 ${
+                          isSelected
+                            ? "border-white bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.45)] scale-105"
+                            : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10 hover:border-white/20 active:scale-95"
+                        }`}
+                      >
+                        {n}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-              <div className="mt-2 flex w-full items-center justify-between px-1">
-                {[1, 2, 3, 4, 5].map((n) => {
-                  const isSelected = selected === n;
-                  return (
-                    <button
-                      key={n}
-                      type="button"
-                      onClick={() => handleSelect(p.key, n)}
-                      aria-label={`${p.title}: ${n}`}
-                      aria-pressed={isSelected}
-                      className={`flex h-11 w-11 items-center justify-center rounded-full border text-sm font-semibold transition-all duration-300 sm:h-12 sm:w-12 ${
-                        isSelected
-                          ? "border-white bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.45)] scale-105"
-                          : "border-white/10 bg-white/5 text-zinc-300 hover:bg-white/10 hover:border-white/20 active:scale-95"
-                      }`}
-                    >
-                      {n}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            </Fragment>
           );
         })}
       </div>
@@ -539,7 +568,7 @@ function RatingCard({
           setSubmitted(true);
           onSkip();
         }}
-        className="mx-auto mt-7 block text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-zinc-300"
+        className="mx-auto mt-7 block text-[11px] font-semibold uppercase tracking-[0.18em] text-rose-500/90 transition-colors duration-300 hover:text-rose-400"
       >
         Skip this place
       </button>
