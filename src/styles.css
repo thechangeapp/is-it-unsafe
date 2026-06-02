@@ -162,31 +162,53 @@
   animation: breathe-glow 7s ease-in-out infinite;
 }
 
-@keyframes float-gemini-1 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(24px, -40px) scale(1.08); }
-  66% { transform: translate(-16px, 16px) scale(0.96); }
+@keyframes gemini-teal {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+  33% {
+    transform: translate(40px, -30px) scale(1.15) rotate(12deg);
+    opacity: 0.35;
+  }
+  66% {
+    transform: translate(-30px, 20px) scale(0.9) rotate(-8deg);
+    opacity: 0.95;
+  }
 }
 
-@keyframes float-gemini-2 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  50% { transform: translate(-32px, 32px) scale(1.12); }
+@keyframes gemini-purple {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-50px, 40px) scale(1.2) rotate(-15deg);
+    opacity: 0.95;
+  }
 }
 
-@keyframes float-gemini-3 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  50% { transform: translate(32px, -24px) scale(0.92); }
+@keyframes gemini-gold {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(35px, -25px) scale(0.85) rotate(18deg);
+    opacity: 0.25;
+  }
 }
 
-.animate-gemini-1 {
-  animation: float-gemini-1 12s ease-in-out infinite;
+.animate-gemini-teal {
+  animation: gemini-teal 7s ease-in-out infinite;
 }
 
-.animate-gemini-2 {
-  animation: float-gemini-2 15s ease-in-out infinite;
+.animate-gemini-purple {
+  animation: gemini-purple 9s ease-in-out infinite;
 }
 
-.animate-gemini-3 {
-  animation: float-gemini-3 10s ease-in-out infinite;
+.animate-gemini-gold {
+  animation: gemini-gold 8s ease-in-out infinite;
 }
+
 

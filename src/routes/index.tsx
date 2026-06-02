@@ -511,22 +511,34 @@ function GeminiBackground() {
       {/* Indigo Base */}
       <div
         className="absolute top-[-100px] left-[10%] w-[80%] h-[350px] rounded-full blur-[110px] opacity-60"
-        style={{ background: "radial-gradient(circle, rgba(30, 58, 138, 0.3) 0%, rgba(0,0,0,0) 80%)" }}
+        style={{
+          background: "radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, rgba(0,0,0,0) 80%)",
+          mixBlendMode: "screen",
+        }}
       />
       {/* Teal / Emerald Spot */}
       <div
         className="animate-gemini-teal absolute top-[-150px] left-[-80px] w-[350px] h-[350px] rounded-full blur-[100px]"
-        style={{ background: "radial-gradient(circle, rgba(13, 148, 136, 0.35) 0%, rgba(0,0,0,0) 75%)" }}
+        style={{
+          background: "radial-gradient(circle, rgba(20, 184, 166, 0.45) 0%, rgba(0,0,0,0) 75%)",
+          mixBlendMode: "screen",
+        }}
       />
       {/* Purple / Violet Spot */}
       <div
         className="animate-gemini-purple absolute top-[-120px] left-[15%] w-[400px] h-[400px] rounded-full blur-[110px]"
-        style={{ background: "radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, rgba(0,0,0,0) 75%)" }}
+        style={{
+          background: "radial-gradient(circle, rgba(139, 92, 246, 0.45) 0%, rgba(0,0,0,0) 75%)",
+          mixBlendMode: "screen",
+        }}
       />
       {/* Gold / Orange Spot */}
       <div
         className="animate-gemini-gold absolute top-[-150px] right-[-80px] w-[320px] h-[320px] rounded-full blur-[90px]"
-        style={{ background: "radial-gradient(circle, rgba(245, 158, 11, 0.28) 0%, rgba(0,0,0,0) 75%)" }}
+        style={{
+          background: "radial-gradient(circle, rgba(245, 158, 11, 0.38) 0%, rgba(0,0,0,0) 75%)",
+          mixBlendMode: "screen",
+        }}
       />
       {/* Smooth bottom fade-out to ensure solid black at the bottom */}
       <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black to-transparent" />
