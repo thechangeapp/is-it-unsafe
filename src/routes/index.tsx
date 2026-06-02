@@ -504,47 +504,49 @@ function RatingCard({
 
 function GeminiBackground() {
   return (
-    <motion.div
-      initial={{ y: "100vh", opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
-      aria-hidden
-      className="pointer-events-none absolute top-0 inset-x-0 h-[450px] overflow-hidden z-0 bg-black"
-    >
-      {/* Indigo Base */}
-      <div
-        className="absolute top-[-100px] left-[10%] w-[80%] h-[350px] rounded-full blur-[110px] opacity-60"
-        style={{
-          background: "radial-gradient(circle, rgba(37, 99, 235, 0.45) 0%, rgba(0,0,0,0) 80%)",
-          mixBlendMode: "screen",
-        }}
-      />
-      {/* Teal / Emerald Spot */}
-      <div
-        className="animate-gemini-teal absolute top-[-150px] left-[-80px] w-[350px] h-[350px] rounded-full blur-[100px]"
-        style={{
-          background: "radial-gradient(circle, rgba(13, 148, 136, 0.65) 0%, rgba(0,0,0,0) 75%)",
-          mixBlendMode: "screen",
-        }}
-      />
-      {/* Purple / Violet Spot */}
-      <div
-        className="animate-gemini-purple absolute top-[-120px] left-[15%] w-[400px] h-[400px] rounded-full blur-[110px]"
-        style={{
-          background: "radial-gradient(circle, rgba(139, 92, 246, 0.65) 0%, rgba(0,0,0,0) 75%)",
-          mixBlendMode: "screen",
-        }}
-      />
-      {/* Gold / Orange Spot */}
-      <div
-        className="animate-gemini-gold absolute top-[-150px] right-[-80px] w-[320px] h-[320px] rounded-full blur-[90px]"
-        style={{
-          background: "radial-gradient(circle, rgba(245, 158, 11, 0.55) 0%, rgba(0,0,0,0) 75%)",
-          mixBlendMode: "screen",
-        }}
-      />
-      {/* Smooth bottom fade-out to ensure solid black at the bottom */}
-      <div className="absolute inset-x-0 bottom-0 h-[220px] bg-gradient-to-t from-black to-transparent" />
-    </motion.div>
+    <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-transparent">
+      {/* Moving wrapper with transparent background (no sharp edge outlines) */}
+      <motion.div
+        initial={{ y: "100vh", opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 2.8, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute top-0 inset-x-0 h-[450px] bg-transparent"
+      >
+        {/* Indigo Base */}
+        <div
+          className="absolute top-[-100px] left-[10%] w-[80%] h-[350px] rounded-full blur-[110px] opacity-60"
+          style={{
+            background: "radial-gradient(circle, rgba(37, 99, 235, 0.45) 0%, rgba(0,0,0,0) 80%)",
+            mixBlendMode: "screen",
+          }}
+        />
+        {/* Teal / Emerald Spot */}
+        <div
+          className="animate-gemini-teal absolute top-[-150px] left-[-80px] w-[350px] h-[350px] rounded-full blur-[100px]"
+          style={{
+            background: "radial-gradient(circle, rgba(13, 148, 136, 0.65) 0%, rgba(0,0,0,0) 75%)",
+            mixBlendMode: "screen",
+          }}
+        />
+        {/* Purple / Violet Spot */}
+        <div
+          className="animate-gemini-purple absolute top-[-120px] left-[15%] w-[400px] h-[400px] rounded-full blur-[110px]"
+          style={{
+            background: "radial-gradient(circle, rgba(139, 92, 246, 0.65) 0%, rgba(0,0,0,0) 75%)",
+            mixBlendMode: "screen",
+          }}
+        />
+        {/* Gold / Orange Spot */}
+        <div
+          className="animate-gemini-gold absolute top-[-150px] right-[-80px] w-[320px] h-[320px] rounded-full blur-[90px]"
+          style={{
+            background: "radial-gradient(circle, rgba(245, 158, 11, 0.55) 0%, rgba(0,0,0,0) 75%)",
+            mixBlendMode: "screen",
+          }}
+        />
+      </motion.div>
+      {/* Stationary fade overlay - matches the parent's z-0 but sits in front of the moving blobs */}
+      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-t from-black to-transparent" />
+    </div>
   );
 }
