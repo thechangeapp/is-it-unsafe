@@ -36,7 +36,12 @@ function Index() {
     | "saveError"
     | "done"
     | "error";
-  type Rating = { area: string; rating: number };
+  type Rating = {
+    area: string;
+    lighting_rating: number;
+    density_rating: number;
+    gut_rating: number;
+  };
   const [status, setStatus] = useState<Status>("idle");
   const [areas, setAreas] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState<string>("");
@@ -52,7 +57,12 @@ function Index() {
     try {
       await persistRatings({
         data: {
-          ratings: toSave.map((r) => ({ area_name: r.area, rating: r.rating })),
+          ratings: toSave.map((r) => ({
+            area_name: r.area,
+            lighting_rating: r.lighting_rating,
+            density_rating: r.density_rating,
+            gut_rating: r.gut_rating,
+          })),
         },
       });
       setStatus("done");
@@ -117,16 +127,6 @@ function Index() {
     const current = areas[index];
     const done = index >= areas.length;
 
-    const handleRate = (rating: number) => {
-      if (!current) return;
-      const next = [...ratings, { area: current, rating }];
-      setRatings(next);
-      setIndex((i) => i + 1);
-      if (next.length >= areas.length) {
-        void submitRatings(next);
-      }
-    };
-
     return (
       <main className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-black px-5 pt-10 pb-12 sm:pt-14">
         {/* Breathing dark-blue ambient layer */}
@@ -159,44 +159,33 @@ function Index() {
         <div className="relative z-10 flex w-full max-w-sm flex-1 items-center justify-center py-8">
           {done ? null : (
             <AnimatePresence mode="popLayout" initial={false}>
-              <motion.article
+              <RatingCard
                 key={`${current}-${index}`}
-                initial={{ opacity: 0, x: 60, scale: 0.98 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                exit={{ opacity: 0, x: -300 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="w-full rounded-3xl border border-white/10 bg-zinc-900/80 px-6 py-10 backdrop-blur-md sm:px-8 sm:py-12"
-              >
-                <div className="flex min-h-[120px] items-center justify-center">
-                  <h3 className="text-balance text-center font-display text-3xl font-medium leading-tight tracking-tight text-white sm:text-4xl">
-                    {current}
-                  </h3>
-                </div>
-
-                <div className="mt-8 h-px w-full bg-white/10" />
-
-                <div className="mt-8 flex w-full items-end justify-between gap-2 px-1 text-[10px] uppercase tracking-[0.18em] text-zinc-500">
-                  <span>Very Unsafe</span>
-                  <span>Very Safe</span>
-                </div>
-                <div className="mt-2 flex w-full items-center justify-between gap-2">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <button
-                      key={n}
-                      type="button"
-                      onClick={() => handleRate(n)}
-                      className="flex h-12 w-12 flex-1 items-center justify-center rounded-xl border border-white/5 bg-zinc-800 text-base font-medium text-white transition-colors hover:bg-zinc-700 active:bg-zinc-600 sm:h-14"
-                      aria-label={`Rate ${n}`}
-                    >
-                      {n}
-                    </button>
-                  ))}
-                </div>
-
-                <p className="mt-5 text-center text-[11px] uppercase tracking-[0.22em] text-zinc-500">
-                  {index + 1} / {areas.length}
-                </p>
-              </motion.article>
+                area={current}
+                position={index + 1}
+                total={areas.length}
+                onComplete={(values) => {
+                  const next = [...ratings, { area: current, ...values }];
+                  setRatings(next);
+                  setIndex((i) => i + 1);
+                  if (next.length >= areas.length) {
+                    void submitRatings(next);
+                  }
+                }}
+                onSkip={() => {
+                  setIndex((i) => i + 1);
+                  if (ratings.length + (areas.length - index - 1) === 0) {
+                    // edge: nothing rated and this was the last card
+                  }
+                  if (index + 1 >= areas.length) {
+                    if (ratings.length > 0) {
+                      void submitRatings(ratings);
+                    } else {
+                      setStatus("done");
+                    }
+                  }
+                }}
+              />
             </AnimatePresence>
           )}
         </div>
@@ -333,5 +322,157 @@ function Index() {
         This rating is anonymous. We do not store your location or user data.
       </p>
     </main>
+  );
+}
+
+type RatingValues = {
+  lighting_rating: number;
+  density_rating: number;
+  gut_rating: number;
+};
+
+type ParamKey = keyof RatingValues;
+
+const PARAMS: Array<{
+  key: ParamKey;
+  title: string;
+  leftLabel: string;
+  rightLabel: string;
+}> = [
+  {
+    key: "lighting_rating",
+    title: "Lighting at Night",
+    leftLabel: "Very lit",
+    rightLabel: "Very dark",
+  },
+  {
+    key: "density_rating",
+    title: "Women in Crowd",
+    leftLabel: "Many women",
+    rightLabel: "Very few",
+  },
+  {
+    key: "gut_rating",
+    title: "Gut Feeling / Intuition / Experience",
+    leftLabel: "Very unsafe",
+    rightLabel: "Very safe",
+  },
+];
+
+function RatingCard({
+  area,
+  position,
+  total,
+  onComplete,
+  onSkip,
+}: {
+  area: string;
+  position: number;
+  total: number;
+  onComplete: (values: RatingValues) => void;
+  onSkip: () => void;
+}) {
+  const [selections, setSelections] = useState<{
+    lighting_rating: number | null;
+    density_rating: number | null;
+    gut_rating: number | null;
+  }>({
+    lighting_rating: null,
+    density_rating: null,
+    gut_rating: null,
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSelect = (key: ParamKey, value: number) => {
+    if (submitted) return;
+    setSelections((prev) => {
+      const next = { ...prev, [key]: value };
+      if (
+        next.lighting_rating !== null &&
+        next.density_rating !== null &&
+        next.gut_rating !== null
+      ) {
+        setSubmitted(true);
+        // slight delay so the user sees the selected state before slide-away
+        setTimeout(() => {
+          onComplete({
+            lighting_rating: next.lighting_rating!,
+            density_rating: next.density_rating!,
+            gut_rating: next.gut_rating!,
+          });
+        }, 220);
+      }
+      return next;
+    });
+  };
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, x: 60, scale: 0.98 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: -320 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="w-full rounded-3xl border border-white/10 bg-zinc-900/80 px-5 py-7 backdrop-blur-md sm:px-7 sm:py-9"
+    >
+      <h3 className="text-balance text-center font-display text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl">
+        {area}
+      </h3>
+
+      <div className="mt-5 h-px w-full bg-white/10" />
+
+      <div className="mt-5 flex flex-col gap-5">
+        {PARAMS.map((p) => {
+          const selected = selections[p.key];
+          return (
+            <div key={p.key} className="w-full">
+              <p className="text-center text-[12px] font-medium uppercase tracking-[0.14em] text-zinc-300 sm:text-[13px]">
+                {p.title}
+              </p>
+              <div className="mt-2 flex w-full items-end justify-between gap-1.5 px-0.5 text-[9px] uppercase tracking-[0.16em] text-zinc-500">
+                <span>{p.leftLabel}</span>
+                <span>{p.rightLabel}</span>
+              </div>
+              <div className="mt-1.5 flex w-full items-center justify-between gap-1.5">
+                {[1, 2, 3, 4, 5].map((n) => {
+                  const isSelected = selected === n;
+                  return (
+                    <button
+                      key={n}
+                      type="button"
+                      onClick={() => handleSelect(p.key, n)}
+                      aria-label={`${p.title}: ${n}`}
+                      aria-pressed={isSelected}
+                      className={`flex h-11 flex-1 items-center justify-center rounded-xl border text-sm font-medium transition-colors sm:h-12 ${
+                        isSelected
+                          ? "border-white bg-white text-black"
+                          : "border-white/5 bg-zinc-800 text-white hover:bg-zinc-700 active:bg-zinc-600"
+                      }`}
+                    >
+                      {n}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => {
+          if (submitted) return;
+          setSubmitted(true);
+          onSkip();
+        }}
+        className="mx-auto mt-6 block text-[12px] text-zinc-500 transition-colors hover:text-zinc-300"
+      >
+        Skip this place
+      </button>
+
+      <p className="mt-3 text-center text-[10px] uppercase tracking-[0.22em] text-zinc-600">
+        {position} / {total}
+      </p>
+    </motion.article>
   );
 }

@@ -7,7 +7,7 @@ const InputSchema = z.object({
 });
 
 const SYSTEM_PROMPT =
-  'You are a highly precise geographic assistant. The user will provide their latitude and longitude. Your ONLY task is to return a raw JSON array of strings containing 5 to 7 specific neighborhood, area, or locality names near those coordinates. Do not include markdown formatting, backticks, or conversational text. Example output: ["Pitampura", "Alipur", "Rohini"]';
+  "You are a highly precise geographic assistant. Based on the user's latitude and longitude, return a raw JSON array of 5 to 7 specific micro-locations very near them. Do not return broad cities or large neighborhoods. Return specific sectors (e.g., 'Sector 4 Complex'), specific roads (e.g., 'Garhi Bolni Road'), intersections, or known local landmarks. Return only the JSON array of strings.";
 
 function parseAreas(content: string): string[] {
   const tryParse = (raw: string) => {

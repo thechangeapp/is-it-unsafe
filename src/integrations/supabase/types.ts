@@ -18,20 +18,26 @@ export type Database = {
         Row: {
           area_name: string
           created_at: string
+          density_rating: number
+          gut_rating: number
           id: string
-          rating: number
+          lighting_rating: number
         }
         Insert: {
           area_name: string
           created_at?: string
+          density_rating: number
+          gut_rating: number
           id?: string
-          rating: number
+          lighting_rating: number
         }
         Update: {
           area_name?: string
           created_at?: string
+          density_rating?: number
+          gut_rating?: number
           id?: string
-          rating?: number
+          lighting_rating?: number
         }
         Relationships: []
       }
