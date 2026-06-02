@@ -161,3 +161,32 @@
 .animate-breathe {
   animation: breathe-glow 7s ease-in-out infinite;
 }
+
+@keyframes float-gemini-1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(24px, -40px) scale(1.08); }
+  66% { transform: translate(-16px, 16px) scale(0.96); }
+}
+
+@keyframes float-gemini-2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-32px, 32px) scale(1.12); }
+}
+
+@keyframes float-gemini-3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(32px, -24px) scale(0.92); }
+}
+
+.animate-gemini-1 {
+  animation: float-gemini-1 12s ease-in-out infinite;
+}
+
+.animate-gemini-2 {
+  animation: float-gemini-2 15s ease-in-out infinite;
+}
+
+.animate-gemini-3 {
+  animation: float-gemini-3 10s ease-in-out infinite;
+}
+

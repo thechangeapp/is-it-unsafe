@@ -129,19 +129,27 @@ function Index() {
 
     return (
       <main className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-black px-5 pt-10 pb-12 sm:pt-14">
-        {/* Breathing dark-blue ambient layer */}
-        <div aria-hidden className="pointer-events-none fixed inset-0 z-0">
+        {/* Gemini-style animated colorful breathing gradient layer */}
+        <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-black">
+          {/* Indigo Spot */}
           <div
-            className="animate-breathe absolute -top-32 -left-32 h-[420px] w-[420px] rounded-full blur-[120px]"
-            style={{ background: "radial-gradient(circle, rgba(20,40,90,0.35) 0%, rgba(0,0,0,0) 70%)" }}
+            className="animate-gemini-1 absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full blur-[130px] opacity-70"
+            style={{ background: "radial-gradient(circle, rgba(66, 133, 244, 0.25) 0%, rgba(0,0,0,0) 75%)" }}
           />
+          {/* Purple Spot */}
           <div
-            className="animate-breathe absolute -bottom-40 -right-24 h-[460px] w-[460px] rounded-full blur-[140px]"
-            style={{ background: "radial-gradient(circle, rgba(15,30,75,0.32) 0%, rgba(0,0,0,0) 70%)", animationDelay: "2.5s" }}
+            className="animate-gemini-2 absolute -bottom-48 -right-40 h-[550px] w-[550px] rounded-full blur-[140px] opacity-75"
+            style={{ background: "radial-gradient(circle, rgba(147, 51, 234, 0.22) 0%, rgba(0,0,0,0) 75%)" }}
           />
+          {/* Teal / Cyan Spot */}
           <div
-            className="animate-breathe absolute left-1/2 top-1/2 h-[380px] w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[150px]"
-            style={{ background: "radial-gradient(circle, rgba(18,35,80,0.22) 0%, rgba(0,0,0,0) 70%)", animationDelay: "4s" }}
+            className="animate-gemini-3 absolute left-[-10%] top-[40%] h-[400px] w-[400px] rounded-full blur-[120px] opacity-60"
+            style={{ background: "radial-gradient(circle, rgba(6, 182, 212, 0.18) 0%, rgba(0,0,0,0) 75%)" }}
+          />
+          {/* Rose / Magenta Spot */}
+          <div
+            className="animate-gemini-1 absolute right-[5%] top-[15%] h-[450px] w-[450px] rounded-full blur-[130px] opacity-65"
+            style={{ background: "radial-gradient(circle, rgba(244, 63, 94, 0.16) 0%, rgba(0,0,0,0) 75%)", animationDelay: "-3s" }}
           />
         </div>
 
@@ -180,7 +188,7 @@ function Index() {
                     animate={
                       isTop
                         ? { opacity: 1, scale: 1, y: 0, x: 0, rotate: 0 }
-                        : { opacity: 0.5, scale: 0.94, y: 16, x: 0, rotate: 0 }
+                        : { opacity: 0, scale: 0.94, y: 16, x: 0, rotate: 0 }
                     }
                     exit={{
                       opacity: 0,
