@@ -324,3 +324,155 @@ function Index() {
     </main>
   );
 }
+
+type RatingValues = {
+  lighting_rating: number;
+  density_rating: number;
+  gut_rating: number;
+};
+
+type ParamKey = keyof RatingValues;
+
+const PARAMS: Array<{
+  key: ParamKey;
+  title: string;
+  leftLabel: string;
+  rightLabel: string;
+}> = [
+  {
+    key: "lighting_rating",
+    title: "Lighting at Night",
+    leftLabel: "Very lit",
+    rightLabel: "Very dark",
+  },
+  {
+    key: "density_rating",
+    title: "Women in Crowd",
+    leftLabel: "Many women",
+    rightLabel: "Very few",
+  },
+  {
+    key: "gut_rating",
+    title: "Gut Feeling / Intuition / Experience",
+    leftLabel: "Very unsafe",
+    rightLabel: "Very safe",
+  },
+];
+
+function RatingCard({
+  area,
+  position,
+  total,
+  onComplete,
+  onSkip,
+}: {
+  area: string;
+  position: number;
+  total: number;
+  onComplete: (values: RatingValues) => void;
+  onSkip: () => void;
+}) {
+  const [selections, setSelections] = useState<{
+    lighting_rating: number | null;
+    density_rating: number | null;
+    gut_rating: number | null;
+  }>({
+    lighting_rating: null,
+    density_rating: null,
+    gut_rating: null,
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSelect = (key: ParamKey, value: number) => {
+    if (submitted) return;
+    setSelections((prev) => {
+      const next = { ...prev, [key]: value };
+      if (
+        next.lighting_rating !== null &&
+        next.density_rating !== null &&
+        next.gut_rating !== null
+      ) {
+        setSubmitted(true);
+        // slight delay so the user sees the selected state before slide-away
+        setTimeout(() => {
+          onComplete({
+            lighting_rating: next.lighting_rating!,
+            density_rating: next.density_rating!,
+            gut_rating: next.gut_rating!,
+          });
+        }, 220);
+      }
+      return next;
+    });
+  };
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, x: 60, scale: 0.98 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: -320 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="w-full rounded-3xl border border-white/10 bg-zinc-900/80 px-5 py-7 backdrop-blur-md sm:px-7 sm:py-9"
+    >
+      <h3 className="text-balance text-center font-display text-2xl font-medium leading-tight tracking-tight text-white sm:text-3xl">
+        {area}
+      </h3>
+
+      <div className="mt-5 h-px w-full bg-white/10" />
+
+      <div className="mt-5 flex flex-col gap-5">
+        {PARAMS.map((p) => {
+          const selected = selections[p.key];
+          return (
+            <div key={p.key} className="w-full">
+              <p className="text-center text-[12px] font-medium uppercase tracking-[0.14em] text-zinc-300 sm:text-[13px]">
+                {p.title}
+              </p>
+              <div className="mt-2 flex w-full items-end justify-between gap-1.5 px-0.5 text-[9px] uppercase tracking-[0.16em] text-zinc-500">
+                <span>{p.leftLabel}</span>
+                <span>{p.rightLabel}</span>
+              </div>
+              <div className="mt-1.5 flex w-full items-center justify-between gap-1.5">
+                {[1, 2, 3, 4, 5].map((n) => {
+                  const isSelected = selected === n;
+                  return (
+                    <button
+                      key={n}
+                      type="button"
+                      onClick={() => handleSelect(p.key, n)}
+                      aria-label={`${p.title}: ${n}`}
+                      aria-pressed={isSelected}
+                      className={`flex h-11 flex-1 items-center justify-center rounded-xl border text-sm font-medium transition-colors sm:h-12 ${
+                        isSelected
+                          ? "border-white bg-white text-black"
+                          : "border-white/5 bg-zinc-800 text-white hover:bg-zinc-700 active:bg-zinc-600"
+                      }`}
+                    >
+                      {n}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => {
+          if (submitted) return;
+          setSubmitted(true);
+          onSkip();
+        }}
+        className="mx-auto mt-6 block text-[12px] text-zinc-500 transition-colors hover:text-zinc-300"
+      >
+        Skip this place
+      </button>
+
+      <p className="mt-3 text-center text-[10px] uppercase tracking-[0.22em] text-zinc-600">
+        {position} / {total}
+      </p>
+    </motion.article>
+  );
+}
