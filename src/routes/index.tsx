@@ -272,31 +272,28 @@ function Index() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-black px-5 py-8">
-      <section
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
-        className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#0a0a0a] px-8 py-10 text-center transition-all duration-300 sm:px-10 sm:py-12"
-      >
-        {/* Title */}
+    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-black px-5 py-10 sm:gap-10">
+      {/* Title group — outside the modal */}
+      <div className="w-full max-w-sm text-center">
         <h1
           id="modal-title"
           className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-white sm:text-5xl"
         >
           Is it <em className="italic font-normal">Unsafe</em>?
         </h1>
-
-        {/* Subtitle */}
         <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.22em] text-zinc-500">
           By Midnight Intelligence &amp; TheChange Initiative
         </p>
+      </div>
 
-        {/* Divider */}
-        <div className="mx-auto mt-8 h-px w-10 bg-white/10" />
-
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#0a0a0a] px-8 py-10 text-center transition-all duration-300 sm:px-10 sm:py-12"
+      >
         {/* Prompt */}
-        <p className="mt-8 text-[15px] leading-relaxed text-zinc-300">
+        <p className="text-[15px] leading-relaxed text-zinc-300">
           To help map safety, we need to know your general area to find nearby
           neighborhoods.
         </p>
@@ -329,12 +326,12 @@ function Index() {
             {errorMsg}
           </p>
         ) : null}
-
-        {/* Footer */}
-        <p className="mt-8 text-[11px] leading-relaxed text-zinc-600">
-          This rating is anonymous. We do not store your location or user data.
-        </p>
       </section>
+
+      {/* Disclaimer — outside and below the modal */}
+      <p className="max-w-sm text-center text-[11px] leading-relaxed text-zinc-600">
+        This rating is anonymous. We do not store your location or user data.
+      </p>
     </main>
   );
 }
