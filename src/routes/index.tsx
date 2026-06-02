@@ -129,29 +129,7 @@ function Index() {
 
     return (
       <main className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-black px-5 pt-10 pb-12 sm:pt-14">
-        {/* Gemini-style animated colorful breathing gradient layer */}
-        <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-black">
-          {/* Indigo Spot */}
-          <div
-            className="animate-gemini-1 absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full blur-[130px] opacity-70"
-            style={{ background: "radial-gradient(circle, rgba(66, 133, 244, 0.25) 0%, rgba(0,0,0,0) 75%)" }}
-          />
-          {/* Purple Spot */}
-          <div
-            className="animate-gemini-2 absolute -bottom-48 -right-40 h-[550px] w-[550px] rounded-full blur-[140px] opacity-75"
-            style={{ background: "radial-gradient(circle, rgba(147, 51, 234, 0.22) 0%, rgba(0,0,0,0) 75%)" }}
-          />
-          {/* Teal / Cyan Spot */}
-          <div
-            className="animate-gemini-3 absolute left-[-10%] top-[40%] h-[400px] w-[400px] rounded-full blur-[120px] opacity-60"
-            style={{ background: "radial-gradient(circle, rgba(6, 182, 212, 0.18) 0%, rgba(0,0,0,0) 75%)" }}
-          />
-          {/* Rose / Magenta Spot */}
-          <div
-            className="animate-gemini-1 absolute right-[5%] top-[15%] h-[450px] w-[450px] rounded-full blur-[130px] opacity-65"
-            style={{ background: "radial-gradient(circle, rgba(244, 63, 94, 0.16) 0%, rgba(0,0,0,0) 75%)", animationDelay: "-3s" }}
-          />
-        </div>
+        <GeminiBackground />
 
         <header className="relative z-10 w-full max-w-md text-center">
           <h2 className="text-balance text-[15px] leading-relaxed text-zinc-300 sm:text-base">
@@ -245,28 +223,34 @@ function Index() {
 
   if (status === "saving") {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-5 bg-black px-6 text-center">
-        <Loader2 className="h-6 w-6 animate-spin text-zinc-400" strokeWidth={1.5} />
-        <p className="text-[13px] tracking-wide text-zinc-500">
-          Saving your anonymous ratings...
-        </p>
+      <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden gap-5 bg-black px-6 text-center">
+        <GeminiBackground />
+        <div className="relative z-10 flex flex-col items-center gap-5">
+          <Loader2 className="h-6 w-6 animate-spin text-zinc-400" strokeWidth={1.5} />
+          <p className="text-[13px] tracking-wide text-zinc-500">
+            Saving your anonymous ratings...
+          </p>
+        </div>
       </main>
     );
   }
 
   if (status === "saveError") {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-black px-6 text-center">
-        <p className="max-w-xs text-[13px] leading-relaxed text-red-400/80">
-          {errorMsg || "Couldn't save your ratings."}
-        </p>
-        <button
-          type="button"
-          onClick={() => void submitRatings(ratings)}
-          className="rounded-full border border-white/15 px-5 py-2 text-[12px] tracking-wide text-zinc-200 transition-colors hover:bg-white/5"
-        >
-          Retry
-        </button>
+      <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden gap-6 bg-black px-6 text-center">
+        <GeminiBackground />
+        <div className="relative z-10 flex flex-col items-center gap-6">
+          <p className="max-w-xs text-[13px] leading-relaxed text-red-400/80">
+            {errorMsg || "Couldn't save your ratings."}
+          </p>
+          <button
+            type="button"
+            onClick={() => void submitRatings(ratings)}
+            className="rounded-full border border-white/15 px-5 py-2 text-[12px] tracking-wide text-zinc-200 transition-colors hover:bg-white/5"
+          >
+            Retry
+          </button>
+        </div>
       </main>
     );
   }
@@ -308,9 +292,10 @@ function Index() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-black px-5 py-10 sm:gap-10">
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden gap-8 bg-black px-5 py-10 sm:gap-10">
+      <GeminiBackground />
       {/* Title group — outside the modal */}
-      <div className="w-full max-w-sm text-center">
+      <div className="relative z-10 w-full max-w-sm text-center">
         <h1
           id="modal-title"
           className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-white sm:text-5xl"
@@ -326,7 +311,7 @@ function Index() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#0a0a0a] px-8 py-10 text-center transition-all duration-300 sm:px-10 sm:py-12"
+        className="relative z-10 w-full max-w-sm rounded-3xl border border-white/10 bg-[#0a0a0a]/90 backdrop-blur-md px-8 py-10 text-center transition-all duration-300 sm:px-10 sm:py-12"
       >
         {/* Prompt */}
         <p className="text-[15px] leading-relaxed text-zinc-300">
@@ -365,7 +350,7 @@ function Index() {
       </section>
 
       {/* Disclaimer — outside and below the modal */}
-      <p className="max-w-sm text-center text-[11px] leading-relaxed text-zinc-600">
+      <p className="relative z-10 max-w-sm text-center text-[11px] leading-relaxed text-zinc-600">
         This rating is anonymous. We do not store your location or user data.
       </p>
     </main>
@@ -517,5 +502,34 @@ function RatingCard({
         {position} / {total}
       </p>
     </article>
+  );
+}
+
+function GeminiBackground() {
+  return (
+    <div aria-hidden className="pointer-events-none absolute top-0 inset-x-0 h-[420px] overflow-hidden z-0 bg-black">
+      {/* Indigo Base */}
+      <div
+        className="absolute top-[-100px] left-[10%] w-[80%] h-[350px] rounded-full blur-[110px] opacity-60"
+        style={{ background: "radial-gradient(circle, rgba(30, 58, 138, 0.3) 0%, rgba(0,0,0,0) 80%)" }}
+      />
+      {/* Teal / Emerald Spot */}
+      <div
+        className="animate-gemini-teal absolute top-[-150px] left-[-80px] w-[350px] h-[350px] rounded-full blur-[100px]"
+        style={{ background: "radial-gradient(circle, rgba(13, 148, 136, 0.35) 0%, rgba(0,0,0,0) 75%)" }}
+      />
+      {/* Purple / Violet Spot */}
+      <div
+        className="animate-gemini-purple absolute top-[-120px] left-[15%] w-[400px] h-[400px] rounded-full blur-[110px]"
+        style={{ background: "radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, rgba(0,0,0,0) 75%)" }}
+      />
+      {/* Gold / Orange Spot */}
+      <div
+        className="animate-gemini-gold absolute top-[-150px] right-[-80px] w-[320px] h-[320px] rounded-full blur-[90px]"
+        style={{ background: "radial-gradient(circle, rgba(245, 158, 11, 0.28) 0%, rgba(0,0,0,0) 75%)" }}
+      />
+      {/* Smooth bottom fade-out to ensure solid black at the bottom */}
+      <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black to-transparent" />
+    </div>
   );
 }
