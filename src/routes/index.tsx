@@ -217,7 +217,7 @@ function Index() {
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
               Midnight Intelligence &amp; TheChange
             </p>
-            <h1 className="mt-2 font-display text-3xl font-medium tracking-tight text-white">
+            <h1 className="mt-2 font-sans text-3xl font-medium tracking-tight text-white">
               Rate Safety
             </h1>
             <p className="mt-3 text-[13px] leading-relaxed text-zinc-400">
@@ -527,7 +527,7 @@ function RatingCard({
             <Fragment key={p.key}>
               {idx > 0 && <div className="mx-auto h-[1px] w-[8px] bg-zinc-700/60" />}
               <div className="w-full">
-                <p className="text-left text-[11px] font-semibold tracking-[0.1em] text-zinc-400">
+                <p className="text-left text-[13px] font-semibold tracking-[0.06em] text-zinc-400">
                   {p.title}
                 </p>
                 <div className="mt-2 flex w-full justify-between px-1 text-[9px] font-medium uppercase tracking-[0.18em] text-zinc-500/80">
