@@ -47,6 +47,28 @@ function Index() {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [index, setIndex] = useState(0);
+  const [countdown, setCountdown] = useState(10);
+
+  useEffect(() => {
+    if (status !== "done") return;
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          if (typeof window !== "undefined") {
+            window.open("", "_self", "");
+            window.close();
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [status]);
+
   const fetchAreas = useServerFn(getNearbyAreas);
   const persistRatings = useServerFn(saveRatings);
 
@@ -256,15 +278,33 @@ function Index() {
   if (status === "done") {
     return (
       <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-6">
-        {/* Ambient rose-gold glow */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[480px] w-[480px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[120px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(190,110,98,0.35) 0%, rgba(120,40,60,0.18) 45%, rgba(0,0,0,0) 75%)",
-          }}
-        />
+        {/* Animated breathing cherry/pink mesh gradient */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-black">
+          {/* Cherry Red Spot */}
+          <div
+            className="animate-cherry-1 absolute left-[15%] top-[20%] h-[380px] w-[380px] rounded-full blur-[110px]"
+            style={{
+              background: "radial-gradient(circle, rgba(220, 38, 38, 0.45) 0%, rgba(0,0,0,0) 75%)",
+              mixBlendMode: "screen",
+            }}
+          />
+          {/* Bright Pink Spot */}
+          <div
+            className="animate-cherry-2 absolute right-[10%] bottom-[20%] h-[420px] w-[420px] rounded-full blur-[120px]"
+            style={{
+              background: "radial-gradient(circle, rgba(236, 72, 153, 0.45) 0%, rgba(0,0,0,0) 75%)",
+              mixBlendMode: "screen",
+            }}
+          />
+          {/* Rose Red Spot */}
+          <div
+            className="animate-cherry-3 absolute left-[30%] bottom-[10%] h-[360px] w-[360px] rounded-full blur-[110px]"
+            style={{
+              background: "radial-gradient(circle, rgba(244, 63, 94, 0.4) 0%, rgba(0,0,0,0) 75%)",
+              mixBlendMode: "screen",
+            }}
+          />
+        </div>
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -272,18 +312,27 @@ function Index() {
           className="relative z-10 flex flex-col items-center text-center"
         >
           <Check
-            className="h-10 w-10 text-[#e8c4b8]"
+            className="h-10 w-10 text-rose-500"
             strokeWidth={1.25}
           />
-          <h1 className="mt-8 font-display text-5xl font-medium leading-none tracking-tight text-white sm:text-6xl">
-            Thank You.
+          <h1 className="mt-8 font-display text-4xl font-medium leading-[1.2] tracking-tight text-white sm:text-5xl">
+            Thank you, <br className="sm:hidden" />
+            <span className="italic font-normal">beautiful</span> ♥️
           </h1>
           <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-zinc-300">
             Your voice helps build a safer world.
           </p>
-          <p className="mt-16 text-[11px] tracking-wide text-zinc-500">
-            You can now securely close this window.
-          </p>
+          <button
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.open("", "_self", "");
+                window.close();
+              }
+            }}
+            className="mt-16 text-[12px] tracking-wide text-zinc-500 hover:text-rose-400 transition-colors duration-300"
+          >
+            Closing this tab in <span className="font-semibold text-rose-400 tabular-nums">{countdown}</span>s · <span className="underline decoration-zinc-600 hover:decoration-rose-400">Exit now</span>
+          </button>
         </motion.section>
       </main>
     );

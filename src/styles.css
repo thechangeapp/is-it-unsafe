@@ -211,4 +211,50 @@
   animation: gemini-gold 8s ease-in-out infinite;
 }
 
+@keyframes cherry-breathe-1 {
+  0%, 100% {
+    transform: translate(-10%, -10%) scale(0.85);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(15%, 10%) scale(1.35);
+    opacity: 0.9;
+  }
+}
+
+@keyframes cherry-breathe-2 {
+  0%, 100% {
+    transform: translate(15%, 15%) scale(1.3);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(-10%, -15%) scale(0.9);
+    opacity: 0.25;
+  }
+}
+
+@keyframes cherry-breathe-3 {
+  0%, 100% {
+    transform: translate(-20%, 10%) scale(0.95) rotate(0deg);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(10%, -20%) scale(1.2) rotate(180deg);
+    opacity: 0.8;
+  }
+}
+
+.animate-cherry-1 {
+  animation: cherry-breathe-1 8s ease-in-out infinite;
+}
+
+.animate-cherry-2 {
+  animation: cherry-breathe-2 10s ease-in-out infinite;
+}
+
+.animate-cherry-3 {
+  animation: cherry-breathe-3 12s ease-in-out infinite;
+}
+
+
 
