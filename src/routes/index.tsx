@@ -383,8 +383,8 @@ const PARAMS: Array<{
   {
     key: "gut_rating",
     title: "Gut Feeling / Intuition / Experience",
-    leftLabel: "Very unsafe",
-    rightLabel: "Very safe",
+    leftLabel: "Very safe",
+    rightLabel: "Super unsafe",
   },
 ];
 
@@ -505,15 +505,15 @@ function RatingCard({
 function GeminiBackground() {
   return (
     <motion.div
-      initial={{ y: 250, opacity: 0 }}
+      initial={{ y: "100vh", opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
       aria-hidden
-      className="pointer-events-none absolute bottom-0 inset-x-0 h-[450px] overflow-hidden z-0 bg-black"
+      className="pointer-events-none absolute top-0 inset-x-0 h-[450px] overflow-hidden z-0 bg-black"
     >
       {/* Indigo Base */}
       <div
-        className="absolute bottom-[-100px] left-[10%] w-[80%] h-[350px] rounded-full blur-[110px] opacity-60"
+        className="absolute top-[-100px] left-[10%] w-[80%] h-[350px] rounded-full blur-[110px] opacity-60"
         style={{
           background: "radial-gradient(circle, rgba(37, 99, 235, 0.45) 0%, rgba(0,0,0,0) 80%)",
           mixBlendMode: "screen",
@@ -521,7 +521,7 @@ function GeminiBackground() {
       />
       {/* Teal / Emerald Spot */}
       <div
-        className="animate-gemini-teal absolute bottom-[-150px] left-[-80px] w-[350px] h-[350px] rounded-full blur-[100px]"
+        className="animate-gemini-teal absolute top-[-150px] left-[-80px] w-[350px] h-[350px] rounded-full blur-[100px]"
         style={{
           background: "radial-gradient(circle, rgba(13, 148, 136, 0.65) 0%, rgba(0,0,0,0) 75%)",
           mixBlendMode: "screen",
@@ -529,7 +529,7 @@ function GeminiBackground() {
       />
       {/* Purple / Violet Spot */}
       <div
-        className="animate-gemini-purple absolute bottom-[-120px] left-[15%] w-[400px] h-[400px] rounded-full blur-[110px]"
+        className="animate-gemini-purple absolute top-[-120px] left-[15%] w-[400px] h-[400px] rounded-full blur-[110px]"
         style={{
           background: "radial-gradient(circle, rgba(139, 92, 246, 0.65) 0%, rgba(0,0,0,0) 75%)",
           mixBlendMode: "screen",
@@ -537,16 +537,14 @@ function GeminiBackground() {
       />
       {/* Gold / Orange Spot */}
       <div
-        className="animate-gemini-gold absolute bottom-[-150px] right-[-80px] w-[320px] h-[320px] rounded-full blur-[90px]"
+        className="animate-gemini-gold absolute top-[-150px] right-[-80px] w-[320px] h-[320px] rounded-full blur-[90px]"
         style={{
           background: "radial-gradient(circle, rgba(245, 158, 11, 0.55) 0%, rgba(0,0,0,0) 75%)",
           mixBlendMode: "screen",
         }}
       />
-      {/* Smooth top fade-out */}
-      <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-black to-transparent" />
-      {/* Smooth bottom fade-out */}
-      <div className="absolute inset-x-0 bottom-0 h-[100px] bg-gradient-to-t from-black to-transparent" />
+      {/* Smooth bottom fade-out to ensure solid black at the bottom */}
+      <div className="absolute inset-x-0 bottom-0 h-[220px] bg-gradient-to-t from-black to-transparent" />
     </motion.div>
   );
 }
