@@ -223,34 +223,28 @@ function Index() {
 
   if (status === "saving") {
     return (
-      <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden gap-5 bg-black px-6 text-center">
-        <GeminiBackground />
-        <div className="relative z-10 flex flex-col items-center gap-5">
-          <Loader2 className="h-6 w-6 animate-spin text-zinc-400" strokeWidth={1.5} />
-          <p className="text-[13px] tracking-wide text-zinc-500">
-            Saving your anonymous ratings...
-          </p>
-        </div>
+      <main className="flex min-h-screen flex-col items-center justify-center gap-5 bg-black px-6 text-center">
+        <Loader2 className="h-6 w-6 animate-spin text-zinc-400" strokeWidth={1.5} />
+        <p className="text-[13px] tracking-wide text-zinc-500">
+          Saving your anonymous ratings...
+        </p>
       </main>
     );
   }
 
   if (status === "saveError") {
     return (
-      <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden gap-6 bg-black px-6 text-center">
-        <GeminiBackground />
-        <div className="relative z-10 flex flex-col items-center gap-6">
-          <p className="max-w-xs text-[13px] leading-relaxed text-red-400/80">
-            {errorMsg || "Couldn't save your ratings."}
-          </p>
-          <button
-            type="button"
-            onClick={() => void submitRatings(ratings)}
-            className="rounded-full border border-white/15 px-5 py-2 text-[12px] tracking-wide text-zinc-200 transition-colors hover:bg-white/5"
-          >
-            Retry
-          </button>
-        </div>
+      <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-black px-6 text-center">
+        <p className="max-w-xs text-[13px] leading-relaxed text-red-400/80">
+          {errorMsg || "Couldn't save your ratings."}
+        </p>
+        <button
+          type="button"
+          onClick={() => void submitRatings(ratings)}
+          className="rounded-full border border-white/15 px-5 py-2 text-[12px] tracking-wide text-zinc-200 transition-colors hover:bg-white/5"
+        >
+          Retry
+        </button>
       </main>
     );
   }
@@ -292,10 +286,9 @@ function Index() {
   }
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden gap-8 bg-black px-5 py-10 sm:gap-10">
-      <GeminiBackground />
+    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-black px-5 py-10 sm:gap-10">
       {/* Title group — outside the modal */}
-      <div className="relative z-10 w-full max-w-sm text-center">
+      <div className="w-full max-w-sm text-center">
         <h1
           id="modal-title"
           className="font-display text-4xl font-medium leading-[1.1] tracking-tight text-white sm:text-5xl"
@@ -311,7 +304,7 @@ function Index() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="relative z-10 w-full max-w-sm rounded-3xl border border-white/10 bg-[#0a0a0a]/90 backdrop-blur-md px-8 py-10 text-center transition-all duration-300 sm:px-10 sm:py-12"
+        className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#0a0a0a] px-8 py-10 text-center transition-all duration-300 sm:px-10 sm:py-12"
       >
         {/* Prompt */}
         <p className="text-[15px] leading-relaxed text-zinc-300">
@@ -350,7 +343,7 @@ function Index() {
       </section>
 
       {/* Disclaimer — outside and below the modal */}
-      <p className="relative z-10 max-w-sm text-center text-[11px] leading-relaxed text-zinc-600">
+      <p className="max-w-sm text-center text-[11px] leading-relaxed text-zinc-600">
         This rating is anonymous. We do not store your location or user data.
       </p>
     </main>
@@ -507,7 +500,13 @@ function RatingCard({
 
 function GeminiBackground() {
   return (
-    <div aria-hidden className="pointer-events-none absolute top-0 inset-x-0 h-[420px] overflow-hidden z-0 bg-black">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2.5, ease: "easeInOut" }}
+      aria-hidden
+      className="pointer-events-none absolute top-0 inset-x-0 h-[420px] overflow-hidden z-0 bg-black"
+    >
       {/* Indigo Base */}
       <div
         className="absolute top-[-100px] left-[10%] w-[80%] h-[350px] rounded-full blur-[110px] opacity-60"
@@ -542,6 +541,6 @@ function GeminiBackground() {
       />
       {/* Smooth bottom fade-out to ensure solid black at the bottom */}
       <div className="absolute inset-x-0 bottom-0 h-[200px] bg-gradient-to-t from-black to-transparent" />
-    </div>
+    </motion.div>
   );
 }
