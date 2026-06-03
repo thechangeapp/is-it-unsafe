@@ -49,6 +49,16 @@ function Index() {
   const [index, setIndex] = useState(0);
   const [countdown, setCountdown] = useState(10);
   const [pledged, setPledged] = useState(false);
+  const [gender, setGender] = useState<"woman" | "man" | null>(null);
+  const [isBlocked, setIsBlocked] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("blocked_user") === "true") {
+        setIsBlocked(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (status !== "done") return;
