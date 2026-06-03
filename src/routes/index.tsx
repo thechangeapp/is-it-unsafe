@@ -225,7 +225,7 @@ function Index() {
     <main
       className={`relative flex min-h-screen flex-col items-center overflow-hidden bg-black transition-all duration-700 ${
         status === "success" && pledged
-          ? "justify-between px-5 pt-10 pb-12 sm:pt-14"
+          ? "justify-start px-5 pt-10 pb-12 sm:pt-14"
           : status === "saving" || status === "saveError"
           ? "justify-center px-6 text-center"
           : status === "done" || (status === "success" && !pledged)
@@ -262,38 +262,34 @@ function Index() {
           >
             {/* Cherry Red Spot */}
             <div
-              className="animate-cherry-1 absolute left-[15%] top-[20%] h-[380px] w-[380px] rounded-full blur-[110px]"
+              className="animate-flow-1 absolute left-[10%] top-[15%] h-[400px] w-[400px] rounded-full blur-[120px]"
               style={{
                 background: "radial-gradient(circle, rgba(220, 38, 38, 0.55) 0%, rgba(0,0,0,0) 75%)",
                 mixBlendMode: "screen",
-                animationDuration: "4s",
               }}
             />
             {/* Bright Pink Spot */}
             <div
-              className="animate-cherry-2 absolute right-[10%] bottom-[20%] h-[420px] w-[420px] rounded-full blur-[120px]"
+              className="animate-flow-2 absolute right-[5%] bottom-[15%] h-[450px] w-[450px] rounded-full blur-[130px]"
               style={{
                 background: "radial-gradient(circle, rgba(236, 72, 153, 0.45) 0%, rgba(0,0,0,0) 75%)",
                 mixBlendMode: "screen",
-                animationDuration: "5s",
               }}
             />
             {/* Rose Red Spot */}
             <div
-              className="animate-cherry-3 absolute left-[30%] bottom-[10%] h-[360px] w-[360px] rounded-full blur-[110px]"
+              className="animate-flow-3 absolute left-[25%] bottom-[5%] h-[380px] w-[380px] rounded-full blur-[110px]"
               style={{
                 background: "radial-gradient(circle, rgba(244, 63, 94, 0.4) 0%, rgba(0,0,0,0) 75%)",
                 mixBlendMode: "screen",
-                animationDuration: "6s",
               }}
             />
             {/* Bright Purple Spot */}
             <div
-              className="animate-cherry-1 absolute right-[20%] top-[10%] h-[350px] w-[350px] rounded-full blur-[100px]"
+              className="animate-flow-4 absolute right-[15%] top-[5%] h-[400px] w-[400px] rounded-full blur-[120px]"
               style={{
                 background: "radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(0,0,0,0) 75%)",
                 mixBlendMode: "screen",
-                animationDuration: "4.5s",
               }}
             />
           </motion.div>
@@ -309,7 +305,7 @@ function Index() {
             </p>
           </header>
 
-          <div className="relative z-10 flex w-full max-w-sm flex-1 items-center justify-center py-8 min-h-[460px] sm:min-h-[500px]">
+          <div className="relative z-10 flex w-full max-w-sm items-center justify-center pt-2 pb-4 min-h-[460px] sm:min-h-[500px]">
             <AnimatePresence mode="popLayout" initial={false}>
               {(() => {
                 const visibleIndices: number[] = [];
