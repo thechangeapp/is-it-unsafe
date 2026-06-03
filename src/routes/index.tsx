@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useRef, useState, Fragment } from "react";
 import { MapPin, Loader2, Check, ShieldAlert } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion } from "framer-motion";
@@ -44,6 +44,7 @@ function Index() {
   };
   const [status, setStatus] = useState<Status>("idle");
   const [areas, setAreas] = useState<string[]>([]);
+  const [district, setDistrict] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [index, setIndex] = useState(0);
@@ -85,11 +86,35 @@ function Index() {
 
   const loading = status === "locating" || status === "fetching";
 
+  const isStraightLine = (rs: Rating[]) => {
+    if (rs.length === 0) return false;
+    const first = rs[0];
+    const v = first.lighting_rating;
+    if (
+      first.density_rating !== v ||
+      first.gut_rating !== v
+    ) {
+      return false;
+    }
+    return rs.every(
+      (r) =>
+        r.lighting_rating === v &&
+        r.density_rating === v &&
+        r.gut_rating === v,
+    );
+  };
+
   const submitRatings = async (toSave: Rating[]) => {
     setStatus("saving");
+    // Straight-line spam filter: silently succeed without saving.
+    if (isStraightLine(toSave)) {
+      setStatus("done");
+      return;
+    }
     try {
       await persistRatings({
         data: {
+          district: district || undefined,
           ratings: toSave.map((r) => ({
             area_name: r.area,
             lighting_rating: r.lighting_rating,
@@ -129,6 +154,7 @@ function Index() {
             data: { lat: pos.coords.latitude, lon: pos.coords.longitude },
           });
           setAreas(result.areas);
+          setDistrict(result.district ?? "");
           setRatings([]);
           setIndex(0);
           setStatus("success");
