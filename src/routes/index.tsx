@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, Fragment } from "react";
-import { MapPin, Loader2, Check, ShieldAlert } from "lucide-react";
+import { MapPin, Loader2, Check, ShieldAlert, VenusAndMars, Heart } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion } from "framer-motion";
 import { getNearbyAreas } from "@/lib/areas.functions";
@@ -226,8 +226,10 @@ function Index() {
       className={`relative flex min-h-screen flex-col items-center overflow-hidden bg-black transition-all duration-700 ${
         status === "success" && pledged
           ? "justify-between px-5 pt-10 pb-12 sm:pt-14"
-          : status === "done" || status === "saving" || status === "saveError" || (status === "success" && !pledged)
+          : status === "done" || status === "saving" || status === "saveError"
           ? "justify-center px-6 text-center"
+          : status === "success" && !pledged
+          ? "justify-start px-6 pt-10 pb-12 text-center sm:pt-16"
           : "justify-start gap-8 px-5 pt-12 pb-10 sm:gap-10 sm:pt-16"
       }`}
     >
@@ -415,7 +417,7 @@ function Index() {
         >
           <div className="flex justify-center">
             <div className="rounded-full bg-rose-500/10 p-3 text-rose-500">
-              <ShieldAlert className="h-8 w-8" strokeWidth={1.5} />
+              <VenusAndMars className="h-8 w-8" strokeWidth={1.5} />
             </div>
           </div>
 
@@ -459,7 +461,7 @@ function Index() {
         >
           <div className="flex justify-center">
             <div className="rounded-full bg-rose-500/10 p-3 text-rose-500">
-              <ShieldAlert className="h-8 w-8" strokeWidth={1.5} />
+              <Heart className="h-8 w-8 text-rose-500 fill-rose-500/20" strokeWidth={1.5} />
             </div>
           </div>
 
