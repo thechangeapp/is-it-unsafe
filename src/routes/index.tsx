@@ -55,8 +55,12 @@ function Index() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (localStorage.getItem("blocked_user") === "true") {
-        setIsBlocked(true);
+      try {
+        if (localStorage.getItem("blocked_user") === "true") {
+          setIsBlocked(true);
+        }
+      } catch (err) {
+        console.warn("localStorage access denied in iframe:", err);
       }
     }
   }, []);
@@ -425,7 +429,11 @@ function Index() {
               type="button"
               onClick={() => {
                 if (typeof window !== "undefined") {
-                  localStorage.setItem("blocked_user", "true");
+                  try {
+                    localStorage.setItem("blocked_user", "true");
+                  } catch (err) {
+                    console.warn("localStorage access denied in iframe:", err);
+                  }
                 }
                 setIsBlocked(true);
               }}
