@@ -146,6 +146,45 @@ function Index() {
     );
   };
 
+  if (isBlocked) {
+    return (
+      <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black px-6 text-center">
+        {/* Subtle deep red warning glow */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-transparent">
+          <div
+            className="absolute left-[50%] top-[50%] h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px] opacity-40"
+            style={{
+              background: "radial-gradient(circle, rgba(220, 38, 38, 0.4) 0%, rgba(0,0,0,0) 80%)",
+            }}
+          />
+        </div>
+
+        <motion.section
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative z-10 flex max-w-sm flex-col items-center"
+        >
+          <div className="rounded-full bg-red-500/10 p-4 text-red-500">
+            <ShieldAlert className="h-12 w-12" strokeWidth={1.5} />
+          </div>
+
+          <h1 className="mt-8 font-sans text-2xl font-bold tracking-tight text-white sm:text-3xl">
+            Access Restricted
+          </h1>
+
+          <p className="mt-4 text-[14px] leading-relaxed text-zinc-400 font-medium">
+            Men are not allowed to rate this women's safety service.
+          </p>
+
+          <p className="mt-6 text-[12px] leading-relaxed text-zinc-600 max-w-xs">
+            This map is a protected space dedicated to capturing the honest, lived experiences of women to ensure safety and precision.
+          </p>
+        </motion.section>
+      </main>
+    );
+  }
+
   return (
     <main
       className={`relative flex min-h-screen flex-col items-center overflow-hidden bg-black transition-all duration-700 ${
@@ -318,7 +357,55 @@ function Index() {
         </>
       )}
 
-      {status === "success" && !pledged && (
+      {status === "success" && !pledged && gender === null && (
+        <motion.section
+          key="gender-card"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="relative z-10 w-full max-w-sm rounded-3xl border border-white/10 bg-[#0e0e11]/80 px-8 py-10 text-center shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] backdrop-blur-lg sm:px-10 sm:py-12"
+        >
+          <div className="flex justify-center">
+            <div className="rounded-full bg-rose-500/10 p-3 text-rose-500">
+              <ShieldAlert className="h-8 w-8" strokeWidth={1.5} />
+            </div>
+          </div>
+
+          <h2 className="mt-6 font-sans text-2xl font-semibold tracking-tight text-white">
+            Identify Your Gender
+          </h2>
+
+          <p className="mt-4 text-[14px] leading-relaxed text-zinc-300">
+            To ensure the accuracy and safety of this map, please identify your gender to proceed.
+          </p>
+
+          <div className="mt-8 flex flex-col gap-3">
+            <button
+              type="button"
+              onClick={() => setGender("woman")}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-rose-600 px-6 py-3.5 text-[14px] font-semibold tracking-wide text-white transition-all duration-300 hover:bg-rose-500 hover:shadow-[0_0_20px_rgba(244,63,94,0.4)] active:scale-95"
+            >
+              Woman
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("blocked_user", "true");
+                }
+                setIsBlocked(true);
+              }}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3.5 text-[14px] font-semibold tracking-wide text-zinc-300 transition-all duration-300 hover:bg-white/10 hover:border-white/20 active:scale-95"
+            >
+              Man
+            </button>
+          </div>
+        </motion.section>
+      )}
+
+      {status === "success" && !pledged && gender === "woman" && (
         <motion.section
           key="pledge-card"
           initial={{ opacity: 0, scale: 0.95 }}
