@@ -19,6 +19,7 @@ export type Database = {
           area_name: string
           created_at: string
           density_rating: number
+          district: string | null
           gut_rating: number
           id: string
           lighting_rating: number
@@ -27,6 +28,7 @@ export type Database = {
           area_name: string
           created_at?: string
           density_rating: number
+          district?: string | null
           gut_rating: number
           id?: string
           lighting_rating: number
@@ -35,6 +37,7 @@ export type Database = {
           area_name?: string
           created_at?: string
           density_rating?: number
+          district?: string | null
           gut_rating?: number
           id?: string
           lighting_rating?: number

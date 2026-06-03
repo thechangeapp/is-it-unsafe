@@ -7,14 +7,24 @@ const InputSchema = z.object({
 });
 
 const SYSTEM_PROMPT =
-  "You are a highly precise geographic assistant. Based on the user's latitude and longitude, return a raw JSON array of 5 to 7 specific micro-locations very near them. Do not return broad cities or large neighborhoods. Return specific sectors (e.g., 'Sector 4 Complex'), specific roads (e.g., 'Garhi Bolni Road'), intersections, or known local landmarks. Return only the JSON array of strings.";
+  "You are a highly precise geographic assistant. Based on the user's latitude and longitude, return a raw JSON OBJECT with this exact structure: {\"district\": \"Name of the district based on coordinates\", \"areas\": [\"Micro-location 1\", \"Micro-location 2\", ...]}. The 'areas' array must contain 5 to 7 specific micro-locations very near them — do not return broad cities or large neighborhoods. Return specific sectors (e.g., 'Sector 4 Complex'), specific roads (e.g., 'Garhi Bolni Road'), intersections, or known local landmarks. Return ONLY the raw JSON object, no markdown, no commentary.";
 
-function parseAreas(content: string): string[] {
+function parseResult(content: string): { district: string; areas: string[] } {
   const tryParse = (raw: string) => {
     try {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.every((x) => typeof x === "string")) {
-        return parsed as string[];
+      const parsed = JSON.parse(raw) as unknown;
+      if (
+        parsed &&
+        typeof parsed === "object" &&
+        !Array.isArray(parsed) &&
+        typeof (parsed as { district?: unknown }).district === "string" &&
+        Array.isArray((parsed as { areas?: unknown }).areas) &&
+        (parsed as { areas: unknown[] }).areas.every((x) => typeof x === "string")
+      ) {
+        return {
+          district: (parsed as { district: string }).district,
+          areas: (parsed as { areas: string[] }).areas,
+        };
       }
     } catch {
       // ignore
@@ -23,15 +33,15 @@ function parseAreas(content: string): string[] {
   };
 
   const direct = tryParse(content.trim());
-  if (direct && direct.length > 0) return direct;
+  if (direct && direct.areas.length > 0) return direct;
 
-  const match = content.match(/\[[\s\S]*?\]/);
+  const match = content.match(/\{[\s\S]*\}/);
   if (match) {
     const fromBlock = tryParse(match[0]);
-    if (fromBlock && fromBlock.length > 0) return fromBlock;
+    if (fromBlock && fromBlock.areas.length > 0) return fromBlock;
   }
 
-  throw new Error("Could not parse area list from model response.");
+  throw new Error("Could not parse district/areas from model response.");
 }
 
 export const getNearbyAreas = createServerFn({ method: "POST" })
@@ -76,6 +86,6 @@ export const getNearbyAreas = createServerFn({ method: "POST" })
       throw new Error("Empty response from model.");
     }
 
-    const areas = parseAreas(content);
-    return { areas };
+    const { district, areas } = parseResult(content);
+    return { district, areas };
   });
