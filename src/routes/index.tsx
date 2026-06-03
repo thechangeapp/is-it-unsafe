@@ -226,9 +226,9 @@ function Index() {
       className={`relative flex min-h-screen flex-col items-center overflow-hidden bg-black transition-all duration-700 ${
         status === "success" && pledged
           ? "justify-between px-5 pt-10 pb-12 sm:pt-14"
-          : status === "done" || status === "saving" || status === "saveError"
+          : status === "saving" || status === "saveError"
           ? "justify-center px-6 text-center"
-          : status === "success" && !pledged
+          : status === "done" || (status === "success" && !pledged)
           ? "justify-start px-6 pt-10 pb-12 text-center sm:pt-16"
           : "justify-start gap-8 px-5 pt-12 pb-10 sm:gap-10 sm:pt-16"
       }`}
@@ -507,7 +507,7 @@ function Index() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative z-10 flex flex-col items-center text-center py-20"
+          className="relative z-10 flex flex-col items-center text-center pt-6 pb-12"
         >
           <Check
             className="h-10 w-10 text-rose-500"
