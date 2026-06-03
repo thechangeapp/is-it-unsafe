@@ -360,12 +360,23 @@ function Index() {
                         area={cardArea}
                         position={i + 1}
                         total={areas.length}
-                        onComplete={(values) => {
-                          const next = [...ratings, { area: cardArea, ...values }];
-                          setRatings(next);
+                        onComplete={(values, elapsedMs) => {
+                          // Speed-trap: silently drop data if user tapped too fast.
+                          const tooFast = elapsedMs < 1500;
+                          const next = tooFast
+                            ? ratings
+                            : [...ratings, { area: cardArea, ...values }];
+                          if (!tooFast) setRatings(next);
                           setIndex((idx) => idx + 1);
                           if (next.length >= areas.length) {
                             void submitRatings(next);
+                          } else if (i + 1 >= areas.length) {
+                            // last card and dropped: finalize
+                            if (next.length > 0) {
+                              void submitRatings(next);
+                            } else {
+                              setStatus("done");
+                            }
                           }
                         }}
                         onSkip={() => {
