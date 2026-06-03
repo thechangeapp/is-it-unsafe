@@ -304,15 +304,6 @@ function Index() {
       {status === "success" && pledged && (
         <>
           <header className="relative z-10 w-full max-w-md text-center">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
-              Midnight Intelligence &amp; TheChange
-            </p>
-            <h1 className="mt-2 font-sans text-3xl font-medium tracking-tight text-white">
-              Rate Safety
-            </h1>
-            <p className="mt-3 text-[13px] leading-relaxed text-zinc-400">
-              Rate from 1 (Safe) to 5 (Unsafe) to help map local safety for women.
-            </p>
             <p className="mt-1 text-[11px] text-zinc-600">
               100% anonymous · No location data is stored
             </p>
@@ -466,7 +457,7 @@ function Index() {
           </div>
 
           <h2 className="mt-6 font-sans text-xl font-semibold tracking-tight text-white">
-            A Protected Space
+            Notice
           </h2>
 
           <p className="mt-4 text-[14px] leading-relaxed text-zinc-300">
