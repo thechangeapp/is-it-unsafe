@@ -309,7 +309,7 @@ function Index() {
             </p>
           </header>
 
-          <div className="relative z-10 flex w-full max-w-sm items-center justify-center pt-2 pb-4 min-h-[460px] sm:min-h-[500px]">
+          <div className="relative z-10 flex w-full max-w-sm items-center justify-center pt-6 sm:pt-10 pb-4 min-h-[460px] sm:min-h-[500px]">
             <AnimatePresence mode="popLayout" initial={false}>
               {(() => {
                 const visibleIndices: number[] = [];
