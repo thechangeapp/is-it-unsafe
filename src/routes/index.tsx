@@ -420,12 +420,8 @@ function Index() {
           </div>
 
           <h2 className="mt-6 font-sans text-2xl font-semibold tracking-tight text-white">
-            Identify Your Gender
+            Please select your gender
           </h2>
-
-          <p className="mt-4 text-[14px] leading-relaxed text-zinc-300">
-            To ensure the accuracy and safety of this map, please identify your gender to proceed.
-          </p>
 
           <div className="mt-8 flex flex-col gap-3">
             <button
@@ -444,7 +440,7 @@ function Index() {
                 }
                 setIsBlocked(true);
               }}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3.5 text-[14px] font-semibold tracking-wide text-zinc-300 transition-all duration-300 hover:bg-white/10 hover:border-white/20 active:scale-95"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-3.5 text-[14px] font-semibold tracking-wide text-white transition-all duration-300 hover:bg-blue-500 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] active:scale-95"
             >
               Man
             </button>
