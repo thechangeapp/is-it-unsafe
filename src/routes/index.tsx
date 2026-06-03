@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, Fragment } from "react";
-import { MapPin, Loader2, Check } from "lucide-react";
+import { MapPin, Loader2, Check, ShieldAlert } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion } from "framer-motion";
 import { getNearbyAreas } from "@/lib/areas.functions";
@@ -48,6 +48,7 @@ function Index() {
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [index, setIndex] = useState(0);
   const [countdown, setCountdown] = useState(10);
+  const [pledged, setPledged] = useState(false);
 
   useEffect(() => {
     if (status !== "done") return;
@@ -148,16 +149,16 @@ function Index() {
   return (
     <main
       className={`relative flex min-h-screen flex-col items-center overflow-hidden bg-black transition-all duration-700 ${
-        status === "success"
+        status === "success" && pledged
           ? "justify-between px-5 pt-10 pb-12 sm:pt-14"
-          : status === "done" || status === "saving" || status === "saveError"
+          : status === "done" || status === "saving" || status === "saveError" || (status === "success" && !pledged)
           ? "justify-center px-6 text-center"
           : "justify-start gap-8 px-5 pt-12 pb-10 sm:gap-10 sm:pt-16"
       }`}
     >
       {/* Background Gradients with AnimatePresence */}
       <AnimatePresence>
-        {status === "success" && (
+        {status === "success" && pledged && (
           <motion.div
             key="gemini-bg"
             initial={{ opacity: 0 }}
@@ -172,7 +173,7 @@ function Index() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {(status === "locating" || status === "fetching" || status === "done") && (
+        {(status === "locating" || status === "fetching" || status === "done" || (status === "success" && !pledged)) && (
           <motion.div
             key="cherry-bg"
             initial={{ opacity: 0 }}
@@ -186,8 +187,9 @@ function Index() {
             <div
               className="animate-cherry-1 absolute left-[15%] top-[20%] h-[380px] w-[380px] rounded-full blur-[110px]"
               style={{
-                background: "radial-gradient(circle, rgba(220, 38, 38, 0.45) 0%, rgba(0,0,0,0) 75%)",
+                background: "radial-gradient(circle, rgba(220, 38, 38, 0.55) 0%, rgba(0,0,0,0) 75%)",
                 mixBlendMode: "screen",
+                animationDuration: "4s",
               }}
             />
             {/* Bright Pink Spot */}
@@ -196,6 +198,7 @@ function Index() {
               style={{
                 background: "radial-gradient(circle, rgba(236, 72, 153, 0.45) 0%, rgba(0,0,0,0) 75%)",
                 mixBlendMode: "screen",
+                animationDuration: "5s",
               }}
             />
             {/* Rose Red Spot */}
@@ -204,6 +207,16 @@ function Index() {
               style={{
                 background: "radial-gradient(circle, rgba(244, 63, 94, 0.4) 0%, rgba(0,0,0,0) 75%)",
                 mixBlendMode: "screen",
+                animationDuration: "6s",
+              }}
+            />
+            {/* Bright Purple Spot */}
+            <div
+              className="animate-cherry-1 absolute right-[20%] top-[10%] h-[350px] w-[350px] rounded-full blur-[100px]"
+              style={{
+                background: "radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(0,0,0,0) 75%)",
+                mixBlendMode: "screen",
+                animationDuration: "4.5s",
               }}
             />
           </motion.div>
@@ -211,7 +224,7 @@ function Index() {
       </AnimatePresence>
 
       {/* CONTENT REDIRECTS BASED ON STATUS */}
-      {status === "success" && (
+      {status === "success" && pledged && (
         <>
           <header className="relative z-10 w-full max-w-md text-center">
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-zinc-500">
@@ -303,6 +316,43 @@ function Index() {
 
           <div aria-hidden className="relative z-10 h-2" />
         </>
+      )}
+
+      {status === "success" && !pledged && (
+        <motion.section
+          key="pledge-card"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="relative z-10 w-full max-w-sm rounded-3xl border border-white/10 bg-[#0e0e11]/80 px-8 py-10 text-center shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] backdrop-blur-lg sm:px-10 sm:py-12"
+        >
+          <div className="flex justify-center">
+            <div className="rounded-full bg-rose-500/10 p-3 text-rose-500">
+              <ShieldAlert className="h-8 w-8" strokeWidth={1.5} />
+            </div>
+          </div>
+
+          <h2 className="mt-6 font-sans text-xl font-semibold tracking-tight text-white">
+            A Protected Space
+          </h2>
+
+          <p className="mt-4 text-[14px] leading-relaxed text-zinc-300">
+            This map is a protected space. Its accuracy could save a woman's life tonight.
+          </p>
+
+          <p className="mt-5 text-[13px] leading-relaxed text-zinc-400 font-medium italic">
+            "By tapping continue, you pledge that you are a woman sharing your honest, lived experience."
+          </p>
+
+          <button
+            type="button"
+            onClick={() => setPledged(true)}
+            className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-rose-600 px-6 py-3.5 text-[14px] font-semibold tracking-wide text-white transition-all duration-300 hover:bg-rose-500 hover:shadow-[0_0_20px_rgba(244,63,94,0.4)] active:scale-95"
+          >
+            I pledge
+          </button>
+        </motion.section>
       )}
 
       {status === "saving" && (
