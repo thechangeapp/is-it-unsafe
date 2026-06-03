@@ -657,9 +657,13 @@ function RatingCard({
   area: string;
   position: number;
   total: number;
-  onComplete: (values: RatingValues) => void;
+  onComplete: (values: RatingValues, elapsedMs: number) => void;
   onSkip: () => void;
 }) {
+  const startTimeRef = useRef<number>(Date.now());
+  useEffect(() => {
+    startTimeRef.current = Date.now();
+  }, []);
   const [selections, setSelections] = useState<{
     lighting_rating: number | null;
     density_rating: number | null;
@@ -683,11 +687,15 @@ function RatingCard({
         setSubmitted(true);
         // slight delay so the user sees the selected state before slide-away
         setTimeout(() => {
-          onComplete({
-            lighting_rating: next.lighting_rating!,
-            density_rating: next.density_rating!,
-            gut_rating: next.gut_rating!,
-          });
+          const elapsedMs = Date.now() - startTimeRef.current;
+          onComplete(
+            {
+              lighting_rating: next.lighting_rating!,
+              density_rating: next.density_rating!,
+              gut_rating: next.gut_rating!,
+            },
+            elapsedMs,
+          );
         }, 220);
       }
       return next;
