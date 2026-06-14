@@ -94,6 +94,7 @@ function Index() {
     if (rs.length === 0) return false;
     const first = rs[0];
     const v = first.lighting_rating;
+    if (v !== 1 && v !== 5) return false;
     if (
       first.density_rating !== v ||
       first.gut_rating !== v
@@ -355,7 +356,7 @@ function Index() {
                         total={areas.length}
                         onComplete={(values, elapsedMs) => {
                           // Speed-trap: silently drop data if user tapped too fast.
-                          const tooFast = elapsedMs < 1500;
+                          const tooFast = elapsedMs < 1000;
                           const next = tooFast
                             ? ratings
                             : [...ratings, { area: cardArea, ...values }];
