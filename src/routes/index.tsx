@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, Fragment } from "react";
-import { MapPin, Loader2, Check, ShieldAlert, VenusAndMars, Heart } from "lucide-react";
+import { MapPin, Loader2, Check, ShieldAlert, VenusAndMars, Heart, Share2 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion } from "framer-motion";
 import { getNearbyAreas } from "@/lib/areas.functions";
 import { saveRatings } from "@/lib/ratings.functions";
+import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -298,7 +300,7 @@ function Index() {
             </p>
           </header>
 
-          <div className="relative z-10 flex w-full max-w-sm items-center justify-center pt-6 sm:pt-10 pb-4 min-h-[460px] sm:min-h-[500px]">
+          <div className="relative z-10 flex w-full max-w-sm items-center justify-center pt-14 sm:pt-20 pb-4 min-h-[460px] sm:min-h-[500px]">
             <AnimatePresence mode="popLayout" initial={false}>
               {(() => {
                 const visibleIndices: number[] = [];
@@ -489,7 +491,7 @@ function Index() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative z-10 flex flex-col items-center text-center pt-6 pb-12"
+          className="relative z-10 flex flex-col items-center text-center pt-6 pb-12 w-full max-w-sm"
         >
           <Check
             className="h-10 w-10 text-rose-500"
@@ -502,6 +504,54 @@ function Index() {
           <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-zinc-300">
             Your voice helps build a safer world.
           </p>
+
+          {/* Share Section */}
+          <div className="mt-10 flex flex-col items-center w-full px-4">
+            <p className="text-[13px] leading-relaxed text-zinc-400 max-w-[260px]">
+              Share this with 3 friends &amp; contribute to women's safety.
+            </p>
+            <button
+              type="button"
+              onClick={async () => {
+                const shareUrl = "https://thechangeapp.help/survey";
+                const shareData = {
+                  title: "Is it Unsafe?",
+                  text: "Anonymously rate neighborhood safety for women and help map safety in your area.",
+                  url: shareUrl,
+                };
+                
+                if (typeof navigator !== "undefined" && navigator.share) {
+                  try {
+                    await navigator.share(shareData);
+                    toast.success("Thank you for sharing!");
+                  } catch (err) {
+                    if (err instanceof Error && err.name !== "AbortError") {
+                      try {
+                        await navigator.clipboard.writeText(shareUrl);
+                        toast.success("Survey link copied to clipboard!");
+                      } catch (clipErr) {
+                        console.error(clipErr);
+                        toast.error("Failed to copy link.");
+                      }
+                    }
+                  }
+                } else {
+                  try {
+                    await navigator.clipboard.writeText(shareUrl);
+                    toast.success("Survey link copied to clipboard!");
+                  } catch (clipErr) {
+                    console.error(clipErr);
+                    toast.error("Failed to copy link.");
+                  }
+                }
+              }}
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-rose-600 hover:bg-rose-500 text-white px-6 py-3 text-[13px] font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_rgba(244,63,94,0.4)] active:scale-95 cursor-pointer"
+            >
+              <Share2 className="h-4 w-4" strokeWidth={2} />
+              <span>Share Survey Link</span>
+            </button>
+          </div>
+
           <button
             onClick={() => {
               if (typeof window !== "undefined") {
