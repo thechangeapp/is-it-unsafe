@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { MapPin, Loader2, Check, ShieldAlert, VenusAndMars, Heart } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { AnimatePresence, motion } from "framer-motion";
@@ -90,29 +90,17 @@ function Index() {
 
   const loading = status === "locating" || status === "fetching";
 
-  const isStraightLine = (rs: Rating[]) => {
-    if (rs.length === 0) return false;
-    const first = rs[0];
-    const v = first.lighting_rating;
-    if (v !== 1 && v !== 5) return false;
-    if (
-      first.density_rating !== v ||
-      first.gut_rating !== v
-    ) {
-      return false;
-    }
-    return rs.every(
-      (r) =>
-        r.lighting_rating === v &&
-        r.density_rating === v &&
-        r.gut_rating === v,
-    );
-  };
-
   const submitRatings = async (toSave: Rating[]) => {
     setStatus("saving");
-    // Straight-line spam filter: silently succeed without saving.
-    if (isStraightLine(toSave)) {
+    // Drop entries where all three parameters are identical for the place.
+    const filtered = toSave.filter(
+      (r) =>
+        !(
+          r.lighting_rating === r.density_rating &&
+          r.density_rating === r.gut_rating
+        ),
+    );
+    if (filtered.length === 0) {
       setStatus("done");
       return;
     }
@@ -120,7 +108,7 @@ function Index() {
       await persistRatings({
         data: {
           district: district || undefined,
-          ratings: toSave.map((r) => ({
+          ratings: filtered.map((r) => ({
             area_name: r.area,
             lighting_rating: r.lighting_rating,
             density_rating: r.density_rating,
@@ -350,27 +338,16 @@ function Index() {
                         mass: 0.8
                       }}
                     >
-                      <RatingCard
+                       <RatingCard
                         area={cardArea}
                         position={i + 1}
                         total={areas.length}
-                        onComplete={(values, elapsedMs) => {
-                          // Speed-trap: silently drop data if user tapped too fast.
-                          const tooFast = elapsedMs < 1000;
-                          const next = tooFast
-                            ? ratings
-                            : [...ratings, { area: cardArea, ...values }];
-                          if (!tooFast) setRatings(next);
+                        onComplete={(values) => {
+                          const next = [...ratings, { area: cardArea, ...values }];
+                          setRatings(next);
                           setIndex((idx) => idx + 1);
                           if (next.length >= areas.length) {
                             void submitRatings(next);
-                          } else if (i + 1 >= areas.length) {
-                            // last card and dropped: finalize
-                            if (next.length > 0) {
-                              void submitRatings(next);
-                            } else {
-                              setStatus("done");
-                            }
                           }
                         }}
                         onSkip={() => {
@@ -651,13 +628,9 @@ function RatingCard({
   area: string;
   position: number;
   total: number;
-  onComplete: (values: RatingValues, elapsedMs: number) => void;
+  onComplete: (values: RatingValues) => void;
   onSkip: () => void;
 }) {
-  const startTimeRef = useRef<number>(Date.now());
-  useEffect(() => {
-    startTimeRef.current = Date.now();
-  }, []);
   const [selections, setSelections] = useState<{
     lighting_rating: number | null;
     density_rating: number | null;
@@ -681,15 +654,11 @@ function RatingCard({
         setSubmitted(true);
         // slight delay so the user sees the selected state before slide-away
         setTimeout(() => {
-          const elapsedMs = Date.now() - startTimeRef.current;
-          onComplete(
-            {
-              lighting_rating: next.lighting_rating!,
-              density_rating: next.density_rating!,
-              gut_rating: next.gut_rating!,
-            },
-            elapsedMs,
-          );
+          onComplete({
+            lighting_rating: next.lighting_rating!,
+            density_rating: next.density_rating!,
+            gut_rating: next.gut_rating!,
+          });
         }, 220);
       }
       return next;
