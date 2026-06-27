@@ -315,7 +315,7 @@ function Index() {
         <>
           <header className="relative z-10 w-full max-w-md text-center">
             <h1 className="sr-only">Rate Nearby Locations for Women's Safety</h1>
-            <p className="mt-1 text-[11px] text-zinc-600">
+            <p className="mt-1 text-[11px] text-zinc-400">
               100% anonymous · No location data is stored
             </p>
           </header>
@@ -816,7 +816,7 @@ function Index() {
           </section>
 
           {/* Disclaimer — outside and below the modal */}
-          <p className="relative z-10 max-w-sm text-center text-[11px] leading-relaxed text-zinc-600">
+          <p className="relative z-10 max-w-sm text-center text-[11px] leading-relaxed text-zinc-400">
             This rating is anonymous. We do not store your location or user data.
           </p>
         </>
