@@ -762,6 +762,9 @@ function Index() {
             >
               Is it <em className="italic font-normal">Unsafe</em>?
             </h1>
+            <p className="mt-3 text-[13px] leading-relaxed text-zinc-400">
+              Map Safety for Women
+            </p>
             <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.22em] text-zinc-500">
               By Midnight Intelligence &amp; TheChange Initiative
             </p>
