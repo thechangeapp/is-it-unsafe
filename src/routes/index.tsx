@@ -59,7 +59,7 @@ function Index() {
   const [showTransitionOverlay, setShowTransitionOverlay] = useState(false);
 
   useEffect(() => {
-    if (typeof navigator !== "undefined" && navigator.share) {
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
       setIsMobileShareSupported(true);
     }
   }, []);
