@@ -678,17 +678,23 @@ function Index() {
               <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide">50% OFF</span>
             </a>
 
-            {/* Offer 2 */}
-            <div className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200">
-              <div className="aspect-square w-full border border-white/10 bg-gradient-to-tr from-rose-950/40 via-[#0e0e11] to-pink-950/40 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative">
-                <div className="absolute inset-0 bg-gradient-to-tr from-rose-500/10 to-pink-500/20 mix-blend-overlay group-hover:scale-105 transition-transform duration-500" />
-                <div className="h-14 w-14 rounded-full bg-gradient-to-tr from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-lg z-10">
-                  <Coffee className="h-7 w-7" strokeWidth={1.5} />
-                </div>
+            {/* Offer 2 - Farzi Cafe */}
+            <a
+              href="https://www.district.in/dining/ncr/farzi-cafe-connaught-place-new-delhi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200"
+            >
+              <div className="aspect-square w-full border border-white/10 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative bg-[#0e0e11]">
+                <img
+                  src="/farzi-cafe.jpg"
+                  alt="Farzi Cafe"
+                  className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
               </div>
-              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">Sapor Cafe</span>
-              <span className="text-[11px] font-bold text-rose-400 uppercase tracking-wide">30% OFF</span>
-            </div>
+              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">Farzi Cafe</span>
+              <span className="text-[11px] font-bold text-rose-400 uppercase tracking-wide">Upto 30% OFF</span>
+            </a>
 
             {/* Offer 3 */}
             <div className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200">
