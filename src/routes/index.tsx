@@ -484,6 +484,7 @@ function Index() {
 
       {status === "saving" && (
         <div className="relative z-10 flex flex-col items-center justify-center gap-5 py-20">
+          <h1 className="sr-only">Saving Your Safety Ratings</h1>
           <Loader2 className="h-6 w-6 animate-spin text-zinc-400" strokeWidth={1.5} />
           <p className="text-[13px] tracking-wide text-zinc-500">
             Saving your anonymous ratings...
@@ -493,6 +494,7 @@ function Index() {
 
       {status === "saveError" && (
         <div className="relative z-10 flex flex-col items-center justify-center gap-6 py-20">
+          <h1 className="sr-only">Couldn't Save Your Safety Ratings</h1>
           <p className="max-w-xs text-[13px] leading-relaxed text-red-400/80">
             {errorMsg || "Couldn't save your ratings."}
           </p>
