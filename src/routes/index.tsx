@@ -794,7 +794,7 @@ function Index() {
               ) : (
                 <>
                   <MapPin className="h-4 w-4" strokeWidth={2} />
-                  <span>Grant Location Access</span>
+                  <span>Grant Location (Temporary)</span>
                 </>
               )}
             </button>
