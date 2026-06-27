@@ -656,7 +656,7 @@ function Index() {
             Special offers for you
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-zinc-400 max-w-[280px]">
-            Claim up to 50% off at our partner restaurants as a thank you for your contribution.
+            Offer will auto apply once clicked.
           </p>
 
           <div className="grid grid-cols-2 gap-x-4 gap-y-6 w-full mt-10">
