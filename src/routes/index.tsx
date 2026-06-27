@@ -714,17 +714,23 @@ function Index() {
               <span className="text-[11px] font-bold text-indigo-400 uppercase tracking-wide">Upto 30% OFF</span>
             </a>
 
-            {/* Offer 4 */}
-            <div className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200">
-              <div className="aspect-square w-full border border-white/10 bg-gradient-to-tr from-teal-950/40 via-[#0e0e11] to-emerald-950/40 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative">
-                <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/10 to-emerald-500/20 mix-blend-overlay group-hover:scale-105 transition-transform duration-500" />
-                <div className="h-14 w-14 rounded-full bg-gradient-to-tr from-teal-500 to-emerald-600 flex items-center justify-center text-white shadow-lg z-10">
-                  <Leaf className="h-7 w-7" strokeWidth={1.5} />
-                </div>
+            {/* Offer 4 - TGI Fridays */}
+            <a
+              href="https://www.district.in/dining/ncr/tgi-fridays-1-connaught-place-new-delhi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200"
+            >
+              <div className="aspect-square w-full border border-white/10 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative bg-[#0e0e11]">
+                <img
+                  src="/tgi-fridays.jpg"
+                  alt="TGI Fridays"
+                  className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
               </div>
-              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">Green Salad Co</span>
-              <span className="text-[11px] font-bold text-teal-400 uppercase tracking-wide">40% OFF</span>
-            </div>
+              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">TGI Fridays</span>
+              <span className="text-[11px] font-bold text-teal-400 uppercase tracking-wide">Upto 40% OFF</span>
+            </a>
           </div>
         </motion.section>
       )}
