@@ -696,17 +696,23 @@ function Index() {
               <span className="text-[11px] font-bold text-rose-400 uppercase tracking-wide">Upto 30% OFF</span>
             </a>
 
-            {/* Offer 3 */}
-            <div className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200">
-              <div className="aspect-square w-full border border-white/10 bg-gradient-to-tr from-indigo-950/40 via-[#0e0e11] to-purple-950/40 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative">
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-purple-500/20 mix-blend-overlay group-hover:scale-105 transition-transform duration-500" />
-                <div className="h-14 w-14 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg z-10">
-                  <Wine className="h-7 w-7" strokeWidth={1.5} />
-                </div>
+            {/* Offer 3 - Chili's Grill & Bar */}
+            <a
+              href="https://www.district.in/dining/ncr/chilis-grill-bar-connaught-place-new-delhi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200"
+            >
+              <div className="aspect-square w-full border border-white/10 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative bg-white">
+                <img
+                  src="/chilis.png"
+                  alt="Chili's Grill & Bar"
+                  className="absolute inset-0 h-full w-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+                />
               </div>
-              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">The Bistro</span>
-              <span className="text-[11px] font-bold text-indigo-400 uppercase tracking-wide">45% OFF</span>
-            </div>
+              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">Chili's Grill &amp; Bar</span>
+              <span className="text-[11px] font-bold text-indigo-400 uppercase tracking-wide">Upto 30% OFF</span>
+            </a>
 
             {/* Offer 4 */}
             <div className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200">
