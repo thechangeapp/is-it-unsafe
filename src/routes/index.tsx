@@ -519,17 +519,14 @@ function Index() {
           <h1 className="mt-8 font-display text-4xl font-medium leading-[1.2] tracking-tight text-white sm:text-5xl">
             Thank you ♥️
           </h1>
-          <p className="mt-5 max-w-xs text-[14px] leading-relaxed text-zinc-300">
-            Your voice helps build a safer world.
-          </p>
-          <p className="mt-4 max-w-xs text-[13px] leading-relaxed text-zinc-400 font-medium">
+          <p className="mt-6 max-w-xs text-[13px] leading-relaxed text-zinc-400 font-medium px-2">
             Your voice just help protecting another woman tonight. To honor your contribution, we are giving up to 50% off your dining bills at our partner restaurants, just for you ♥️
           </p>
 
           <button
             type="button"
             onClick={handleClaimOffer}
-            className="mt-6 w-full max-w-[240px] inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-rose-600 to-amber-600 text-white px-6 py-3.5 text-[14px] font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_20px_rgba(244,63,94,0.4)] active:scale-95 cursor-pointer"
+            className="mt-5 w-full max-w-[200px] inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 text-[12.5px] font-semibold tracking-wide transition-all duration-300 hover:shadow-[0_0_15px_rgba(37,99,235,0.4)] active:scale-95 cursor-pointer"
           >
             Claim Dining Offer
           </button>
@@ -648,49 +645,60 @@ function Index() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative z-10 flex flex-col items-center text-center pt-6 pb-12 w-full max-w-sm"
         >
-          <h1 className="font-display text-4xl font-medium leading-[1.2] tracking-tight text-white sm:text-5xl">
-            Special offers <br />
-            for you
+          <h1 className="font-display text-[6.5vw] sm:text-[28px] md:text-[32px] font-medium tracking-tight text-white whitespace-nowrap">
+            Special offers for you
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-zinc-400 max-w-[280px]">
             Claim up to 50% off at our partner restaurants as a thank you for your contribution.
           </p>
 
-          <div className="grid grid-cols-2 gap-4 w-full mt-10">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-6 w-full mt-10">
             {/* Offer 1 */}
-            <div className="aspect-square border border-white/10 bg-[#0e0e11]/80 rounded-2xl flex flex-col items-center justify-center p-4 hover:border-white/20 hover:bg-white/5 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-md">
-                <Utensils className="h-6 w-6" strokeWidth={1.5} />
+            <div className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200">
+              <div className="aspect-square w-full border border-white/10 bg-gradient-to-tr from-amber-950/40 via-[#0e0e11] to-orange-950/40 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative">
+                <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/10 to-orange-500/20 mix-blend-overlay group-hover:scale-105 transition-transform duration-500" />
+                <div className="h-14 w-14 rounded-full bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-lg z-10">
+                  <Utensils className="h-7 w-7" strokeWidth={1.5} />
+                </div>
               </div>
-              <span className="mt-3 text-[13px] font-semibold text-white tracking-wide">Dine &amp; Wine</span>
-              <span className="mt-1 text-[10px] uppercase font-bold tracking-wider text-amber-400">50% OFF</span>
+              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">Dine &amp; Wine</span>
+              <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide">50% OFF</span>
             </div>
 
             {/* Offer 2 */}
-            <div className="aspect-square border border-white/10 bg-[#0e0e11]/80 rounded-2xl flex flex-col items-center justify-center p-4 hover:border-white/20 hover:bg-white/5 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-md">
-                <Coffee className="h-6 w-6" strokeWidth={1.5} />
+            <div className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200">
+              <div className="aspect-square w-full border border-white/10 bg-gradient-to-tr from-rose-950/40 via-[#0e0e11] to-pink-950/40 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative">
+                <div className="absolute inset-0 bg-gradient-to-tr from-rose-500/10 to-pink-500/20 mix-blend-overlay group-hover:scale-105 transition-transform duration-500" />
+                <div className="h-14 w-14 rounded-full bg-gradient-to-tr from-rose-500 to-pink-600 flex items-center justify-center text-white shadow-lg z-10">
+                  <Coffee className="h-7 w-7" strokeWidth={1.5} />
+                </div>
               </div>
-              <span className="mt-3 text-[13px] font-semibold text-white tracking-wide">Sapor Cafe</span>
-              <span className="mt-1 text-[10px] uppercase font-bold tracking-wider text-rose-400">30% OFF</span>
+              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">Sapor Cafe</span>
+              <span className="text-[11px] font-bold text-rose-400 uppercase tracking-wide">30% OFF</span>
             </div>
 
             {/* Offer 3 */}
-            <div className="aspect-square border border-white/10 bg-[#0e0e11]/80 rounded-2xl flex flex-col items-center justify-center p-4 hover:border-white/20 hover:bg-white/5 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md">
-                <Wine className="h-6 w-6" strokeWidth={1.5} />
+            <div className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200">
+              <div className="aspect-square w-full border border-white/10 bg-gradient-to-tr from-indigo-950/40 via-[#0e0e11] to-purple-950/40 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative">
+                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-purple-500/20 mix-blend-overlay group-hover:scale-105 transition-transform duration-500" />
+                <div className="h-14 w-14 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg z-10">
+                  <Wine className="h-7 w-7" strokeWidth={1.5} />
+                </div>
               </div>
-              <span className="mt-3 text-[13px] font-semibold text-white tracking-wide">The Bistro</span>
-              <span className="mt-1 text-[10px] uppercase font-bold tracking-wider text-indigo-400">45% OFF</span>
+              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">The Bistro</span>
+              <span className="text-[11px] font-bold text-indigo-400 uppercase tracking-wide">45% OFF</span>
             </div>
 
             {/* Offer 4 */}
-            <div className="aspect-square border border-white/10 bg-[#0e0e11]/80 rounded-2xl flex flex-col items-center justify-center p-4 hover:border-white/20 hover:bg-white/5 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] cursor-pointer active:scale-95">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-teal-500 to-emerald-600 flex items-center justify-center text-white shadow-md">
-                <Leaf className="h-6 w-6" strokeWidth={1.5} />
+            <div className="flex flex-col text-left group cursor-pointer active:scale-[0.98] transition-transform duration-200">
+              <div className="aspect-square w-full border border-white/10 bg-gradient-to-tr from-teal-950/40 via-[#0e0e11] to-emerald-950/40 rounded-2xl flex items-center justify-center overflow-hidden hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.6)] relative">
+                <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/10 to-emerald-500/20 mix-blend-overlay group-hover:scale-105 transition-transform duration-500" />
+                <div className="h-14 w-14 rounded-full bg-gradient-to-tr from-teal-500 to-emerald-600 flex items-center justify-center text-white shadow-lg z-10">
+                  <Leaf className="h-7 w-7" strokeWidth={1.5} />
+                </div>
               </div>
-              <span className="mt-3 text-[13px] font-semibold text-white tracking-wide">Green Salad Co</span>
-              <span className="mt-1 text-[10px] uppercase font-bold tracking-wider text-teal-400">40% OFF</span>
+              <span className="mt-2 text-[13px] font-semibold text-zinc-100 tracking-wide line-clamp-1">Green Salad Co</span>
+              <span className="text-[11px] font-bold text-teal-400 uppercase tracking-wide">40% OFF</span>
             </div>
           </div>
 
@@ -708,10 +716,13 @@ function Index() {
           <motion.div
             initial={{ x: "-100%" }}
             animate={{ x: "0%" }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-50 bg-gradient-to-r from-rose-500 via-purple-600 to-blue-600"
-            style={{ pointerEvents: "none" }}
+            exit={{ x: "-100%" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-y-0 left-[-20vw] w-[140vw] z-50"
+            style={{
+              background: "linear-gradient(to right, transparent 0%, #000000 15%, #000000 85%, transparent 100%)",
+              pointerEvents: "none",
+            }}
           />
         )}
       </AnimatePresence>
