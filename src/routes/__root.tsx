@@ -104,6 +104,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap",
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              name: "Is it Unsafe?",
+              url: "https://is-it-unsafe.lovable.app",
+              description:
+                "Anonymously rate how safe nearby neighborhoods feel for women and help map safety in your area.",
+            },
+            {
+              "@type": "Organization",
+              name: "Is it Unsafe?",
+              url: "https://is-it-unsafe.lovable.app",
+              contributor: [
+                { "@type": "Organization", name: "Midnight Intelligence" },
+                { "@type": "Organization", name: "TheChange Initiative" },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
