@@ -1,0 +1,13 @@
+# Is it Unsafe?
+
+> An anonymous, mobile-first web app where women rate how safe nearby micro-locations feel — lighting at night, density of women in the crowd, and overall gut feeling — to help map neighborhood safety.
+
+Built by Midnight Intelligence and TheChange Initiative. No location or user data is stored; ratings are submitted anonymously.
+
+## Pages
+
+- [Home](/): Grant location access and rate the safety of nearby micro-locations.
+
+## Optional
+
+- [Sitemap](/sitemap.xml): Machine-readable list of public routes.
