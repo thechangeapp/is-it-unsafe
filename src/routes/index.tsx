@@ -239,7 +239,7 @@ function Index() {
     <main
       className={`relative flex min-h-screen flex-col items-center overflow-hidden bg-black transition-all duration-700 ${
         status === "success" && pledged
-          ? "justify-start px-5 pt-10 pb-12 sm:pt-14"
+          ? "justify-start px-5 pt-14 pb-12 sm:pt-20"
           : status === "saving" || status === "saveError"
           ? "justify-center px-6 text-center"
           : status === "done" || status === "offers" || (status === "success" && !pledged)
@@ -319,7 +319,7 @@ function Index() {
             </p>
           </header>
 
-          <div className="relative z-10 flex w-full max-w-sm items-center justify-center pt-14 sm:pt-20 pb-4 min-h-[460px] sm:min-h-[500px]">
+          <div className="relative z-10 flex w-full max-w-sm items-center justify-center pt-24 sm:pt-32 pb-4 min-h-[460px] sm:min-h-[500px]">
             <AnimatePresence mode="popLayout" initial={false}>
               {(() => {
                 const visibleIndices: number[] = [];
@@ -645,6 +645,13 @@ function Index() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative z-10 flex flex-col items-center text-center pt-6 pb-12 w-full max-w-sm"
         >
+          <button
+            onClick={() => setStatus("done")}
+            className="mb-8 text-[12px] tracking-wide text-zinc-500 hover:text-rose-400 transition-colors duration-300 underline underline-offset-4 self-start pl-1 flex items-center gap-1.5 cursor-pointer"
+          >
+            <span>← Back to thank you page</span>
+          </button>
+
           <h1 className="font-display text-[6.5vw] sm:text-[28px] md:text-[32px] font-medium tracking-tight text-white whitespace-nowrap">
             Special offers for you
           </h1>
@@ -701,13 +708,6 @@ function Index() {
               <span className="text-[11px] font-bold text-teal-400 uppercase tracking-wide">40% OFF</span>
             </div>
           </div>
-
-          <button
-            onClick={() => setStatus("done")}
-            className="mt-12 text-[12px] tracking-wide text-zinc-500 hover:text-rose-400 transition-colors duration-300 underline underline-offset-4"
-          >
-            Back to thank you page
-          </button>
         </motion.section>
       )}
 
