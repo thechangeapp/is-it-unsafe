@@ -314,7 +314,8 @@ function Index() {
       {status === "success" && pledged && (
         <>
           <header className="relative z-10 w-full max-w-md text-center">
-            <p className="mt-1 text-[11px] text-zinc-600">
+            <h1 className="sr-only">Rate Nearby Locations for Women's Safety</h1>
+            <p className="mt-1 text-[11px] text-zinc-400">
               100% anonymous · No location data is stored
             </p>
           </header>
@@ -483,6 +484,7 @@ function Index() {
 
       {status === "saving" && (
         <div className="relative z-10 flex flex-col items-center justify-center gap-5 py-20">
+          <h1 className="sr-only">Saving Your Safety Ratings</h1>
           <Loader2 className="h-6 w-6 animate-spin text-zinc-400" strokeWidth={1.5} />
           <p className="text-[13px] tracking-wide text-zinc-500">
             Saving your anonymous ratings...
@@ -492,6 +494,7 @@ function Index() {
 
       {status === "saveError" && (
         <div className="relative z-10 flex flex-col items-center justify-center gap-6 py-20">
+          <h1 className="sr-only">Couldn't Save Your Safety Ratings</h1>
           <p className="max-w-xs text-[13px] leading-relaxed text-red-400/80">
             {errorMsg || "Couldn't save your ratings."}
           </p>
@@ -762,6 +765,9 @@ function Index() {
             >
               Is it <em className="italic font-normal">Unsafe</em>?
             </h1>
+            <p className="mt-3 text-[13px] leading-relaxed text-zinc-400">
+              Map Safety for Women
+            </p>
             <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.22em] text-zinc-500">
               By Midnight Intelligence &amp; TheChange Initiative
             </p>
@@ -810,7 +816,7 @@ function Index() {
           </section>
 
           {/* Disclaimer — outside and below the modal */}
-          <p className="relative z-10 max-w-sm text-center text-[11px] leading-relaxed text-zinc-600">
+          <p className="relative z-10 max-w-sm text-center text-[11px] leading-relaxed text-zinc-400">
             This rating is anonymous. We do not store your location or user data.
           </p>
         </>
