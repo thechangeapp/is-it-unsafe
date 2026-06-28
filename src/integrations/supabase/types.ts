@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       safety_ratings: {
         Row: {
+          area: string | null
           area_name: string
           created_at: string
           density_rating: number
@@ -25,6 +26,7 @@ export type Database = {
           lighting_rating: number
         }
         Insert: {
+          area?: string | null
           area_name: string
           created_at?: string
           density_rating: number
@@ -34,6 +36,7 @@ export type Database = {
           lighting_rating: number
         }
         Update: {
+          area?: string | null
           area_name?: string
           created_at?: string
           density_rating?: number
