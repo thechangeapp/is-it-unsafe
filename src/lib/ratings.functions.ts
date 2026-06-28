@@ -4,6 +4,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const InputSchema = z.object({
   district: z.string().min(1).max(200).optional(),
+  area: z.string().min(1).max(200).optional(),
   ratings: z
     .array(
       z.object({
@@ -23,6 +24,7 @@ export const saveRatings = createServerFn({ method: "POST" })
     const rows = data.ratings.map((r) => ({
       ...r,
       district: data.district ?? null,
+      area: data.area ?? null,
     }));
 
     const { error } = await supabaseAdmin
