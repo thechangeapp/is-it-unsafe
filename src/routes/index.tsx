@@ -48,6 +48,7 @@ function Index() {
   const [status, setStatus] = useState<Status>("idle");
   const [areas, setAreas] = useState<string[]>([]);
   const [district, setDistrict] = useState<string>("");
+  const [area, setArea] = useState<string>("");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [index, setIndex] = useState(0);
@@ -119,6 +120,7 @@ function Index() {
       await persistRatings({
         data: {
           district: district || undefined,
+          area: area || undefined,
           ratings: filtered.map((r) => ({
             area_name: r.area,
             lighting_rating: r.lighting_rating,
@@ -159,6 +161,7 @@ function Index() {
           });
           setAreas(result.areas);
           setDistrict(result.district ?? "");
+          setArea(result.area ?? "");
           setRatings([]);
           setIndex(0);
           setStatus("success");

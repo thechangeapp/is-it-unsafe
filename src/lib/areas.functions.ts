@@ -7,9 +7,9 @@ const InputSchema = z.object({
 });
 
 const SYSTEM_PROMPT =
-  "You are a highly precise geographic assistant mapping areas for localized safety data. Based strictly on the provided user's latitude and longitude, return a raw JSON OBJECT with this exact structure: {\"district\": \"Name of the district based on coordinates\", \"areas\": [\"Micro-location 1\", \"Micro-location 2\", ...]}. The 'areas' array must contain 5 to 7 specific micro-locations.\n\nCRITICAL SELECTION RULES:\n\n1. STRICT LOCALIZATION: Only return real, accurate places that actually exist within a close radius of the provided latitude and longitude. Example names like 'Block 14' or 'Sector 4 Complex' in instructions are illustrative of the TYPE of place wanted — do NOT copy example names verbatim.\n\n2. AVOID DEAD ZONES: Do not return obscure or unpopulated map coordinates, industrial wastelands, empty fields, forests, or places people rarely walk through.\n\n3. PRIORITIZE DAILY COMMUTES & LIFE: Return places where daily life, walking, and normal commutes happen. Focus on:\n   - Busy local transit hubs and landmarks (specific Metro Stations, popular malls, bustling local markets).\n   - Specific residential blocks or sector numbers.\n   - Connecting roads or intermediate transit paths.\n   - Specific walking paths, colony gates, or known local landmarks.\n\nReturn ONLY the raw JSON object — no markdown, no backticks, no commentary.";
+  "You are a highly precise geographic assistant mapping areas for localized safety data. Based strictly on the provided user's latitude and longitude, return a raw JSON OBJECT with this exact structure: {\"district\": \"Official District\", \"area\": \"Local Neighborhood\", \"areas\": [\"Micro 1\", \"Micro 2\", ...]}.\n\nYou must differentiate between the official administrative district and the local neighborhood:\n- district: The official, broader administrative district on the map (e.g., 'Central Delhi', 'South East Delhi', 'Gurugram').\n- area: The specific recognizable neighborhood or locality (e.g., 'Karol Bagh', 'Kirti Nagar', 'Sector 14').\n- areas: The array of 5 to 7 specific micro-locations (parks, blocks, cafes, specific streets) as instructed below.\n\nCRITICAL SELECTION RULES:\n\n1. STRICT LOCALIZATION: Only return real, accurate places that actually exist within a close radius of the provided latitude and longitude. Example names in instructions are illustrative of the TYPE of place wanted — do NOT copy example names verbatim.\n\n2. AVOID DEAD ZONES: Do not return obscure or unpopulated map coordinates, industrial wastelands, empty fields, forests, or places people rarely walk through.\n\n3. PRIORITIZE DAILY COMMUTES & LIFE: Return places where daily life, walking, and normal commutes happen. Focus on:\n   - Busy local transit hubs and landmarks (specific Metro Stations, popular malls, bustling local markets).\n   - Specific residential blocks or sector numbers.\n   - Connecting roads or intermediate transit paths.\n   - Specific walking paths, colony gates, or known local landmarks.\n\nReturn ONLY the raw JSON object — no markdown, no backticks, no commentary.";
 
-function parseResult(content: string): { district: string; areas: string[] } {
+function parseResult(content: string): { district: string; area: string; areas: string[] } {
   const tryParse = (raw: string) => {
     try {
       const parsed = JSON.parse(raw) as unknown;
@@ -21,8 +21,10 @@ function parseResult(content: string): { district: string; areas: string[] } {
         Array.isArray((parsed as { areas?: unknown }).areas) &&
         (parsed as { areas: unknown[] }).areas.every((x) => typeof x === "string")
       ) {
+        const maybeArea = (parsed as { area?: unknown }).area;
         return {
           district: (parsed as { district: string }).district,
+          area: typeof maybeArea === "string" ? maybeArea : "",
           areas: (parsed as { areas: string[] }).areas,
         };
       }
@@ -41,7 +43,7 @@ function parseResult(content: string): { district: string; areas: string[] } {
     if (fromBlock && fromBlock.areas.length > 0) return fromBlock;
   }
 
-  throw new Error("Could not parse district/areas from model response.");
+  throw new Error("Could not parse district/area/areas from model response.");
 }
 
 export const getNearbyAreas = createServerFn({ method: "POST" })
@@ -86,6 +88,6 @@ export const getNearbyAreas = createServerFn({ method: "POST" })
       throw new Error("Empty response from model.");
     }
 
-    const { district, areas } = parseResult(content);
-    return { district, areas };
+    const { district, area, areas } = parseResult(content);
+    return { district, area, areas };
   });
